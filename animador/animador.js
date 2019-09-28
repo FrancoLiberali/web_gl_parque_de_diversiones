@@ -9,10 +9,7 @@ var gl = null,
   vertexShader = null;
 
 var vertexPositionAttribute = null,
-  trianglesVerticeBuffer = null,
-  vertexNormalAttribute = null,
-  trianglesNormalBuffer = null,
-  trianglesIndexBuffer = null;
+  vertexNormalAttribute = null;
 
 var modelMatrix = mat4.create();
 var viewMatrix = mat4.create();
@@ -30,10 +27,8 @@ function loadShader(url, callback) {
   req.send();
 }
 
-
 var vs_source = "";
 var fs_source = "";
-
 
 function loadVertexShader() {
   loadShader("../glsl/vertex1.glsl", function(code) {
@@ -45,27 +40,21 @@ function loadVertexShader() {
   })
 };
 
-
-
 function initWebGL() {
 
   canvas = document.getElementById("my-canvas");
 
   try {
     gl = canvas.getContext("webgl");
-
   } catch (e) {
     alert("Error: Your browser does not appear to support WebGL.");
   }
 
   if (gl) {
-
     setupWebGL();
     initShaders();
     setupBuffers();
-    setupVertexShaderMatrix();
     tick();
-
   } else {
     alert("Error: Your browser does not appear to support WebGL.");
   }
@@ -127,6 +116,19 @@ function makeShader(src, type) {
   return shader;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+function setupBuffers() {
+  my_grid = new VertexGrid(4, 4);
+  my_grid.createUniformPlaneGrid();
+  my_grid.createIndexBuffer();
+  my_grid.setupWebGLBuffers();
+  animados = [my_grid];
+}
+
 function setupVertexShaderMatrix() {
 
   var modelMatrixUniform = gl.getUniformLocation(glProgram, "modelMatrix");
@@ -140,7 +142,7 @@ function setupVertexShaderMatrix() {
   gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 }
 
-function drawScene() {
+function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndexBuffer) {
 
   setupVertexShaderMatrix();
 
@@ -176,7 +178,9 @@ function animate() {
 function tick() {
 
   requestAnimationFrame(tick);
-  drawScene();
+  _.each(animados, function(animado) {
+    animado.dibujar();
+  })
   animate();
 }
 

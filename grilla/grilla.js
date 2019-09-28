@@ -13,13 +13,18 @@ function VertexGrid(_rows, _cols) {
   this.normal_buffer = null;
   this.color_buffer = null;
 
+  this.trianglesVerticeBuffer = null,
+  this.trianglesNormalBuffer = null,
+  this.trianglesIndexBuffer = null;
+
+
   this.createIndexBuffer = function() {
 
     // A partir de conocer las de la grilla
     // se genera el index buffer correspondiente para renderizar la grilla utilizando
     // triangle-strip
 
-		this.index_buffer = [];
+    this.index_buffer = [];
     for (var i = 0; i < this.rows - 1; i++) {
       this.index_buffer.push(i * this.cols);
       for (var j = 0; j < this.cols - 1; j++) {
@@ -80,15 +85,15 @@ function VertexGrid(_rows, _cols) {
   this.setupWebGLBuffers = function() {
 
     // 1. Creamos un buffer para las posicioens dentro del pipeline.
-    trianglesVerticeBuffer = gl.createBuffer();
+    this.trianglesVerticeBuffer = gl.createBuffer();
     // 2. Le decimos a WebGL que las siguientes operaciones que vamos a ser se aplican sobre el buffer que
     // hemos creado.
-    gl.bindBuffer(gl.ARRAY_BUFFER, trianglesVerticeBuffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.trianglesVerticeBuffer);
     // 3. Cargamos datos de las posiciones en el buffer.
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
 
-    trianglesNormalBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, trianglesNormalBuffer);
+    this.trianglesNormalBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.trianglesNormalBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normal_buffer), gl.STATIC_DRAW);
 
     // Repetimos los pasos 1. 2. y 3. para la informaci�n del color
@@ -99,21 +104,13 @@ function VertexGrid(_rows, _cols) {
     // Repetimos los pasos 1. 2. y 3. para la información de los índices
     // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
     // Notar también que se usa un array de enteros en lugar de floats.
-    trianglesIndexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, trianglesIndexBuffer);
-    trianglesIndexBuffer.number_vertex_point = this.index_buffer.length;
+    this.trianglesIndexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.trianglesIndexBuffer);
+    this.trianglesIndexBuffer.number_vertex_point = this.index_buffer.length;
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
   }
-}
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
 
-function setupBuffers() {
-  my_grid = new VertexGrid(4, 4);
-  my_grid.createUniformPlaneGrid();
-  my_grid.createIndexBuffer();
-  my_grid.setupWebGLBuffers();
+  this.dibujar = function() {
+    drawScene(this.trianglesVerticeBuffer, this.trianglesNormalBuffer, this.trianglesIndexBuffer);
+  }
 }
