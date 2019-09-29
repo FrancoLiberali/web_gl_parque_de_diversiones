@@ -17,6 +17,9 @@ var projMatrix = mat4.create();
 var normalMatrix = mat4.create();
 var rotate_angle = -1.57078;
 
+var animados = [];
+var test = false;
+
 function loadShader(url, callback) {
 
   var req = new XMLHttpRequest();
@@ -31,9 +34,9 @@ var vs_source = "";
 var fs_source = "";
 
 function loadVertexShader() {
-  loadShader("../glsl/vertex1.glsl", function(code) {
+  loadShader("../../glsl/vertex1.glsl", function(code) {
     vs_source = code;
-    loadShader("../glsl/fragment1.glsl", function(code) {
+    loadShader("../../glsl/fragment1.glsl", function(code) {
       fs_source = code;
       initWebGL();
     })
@@ -53,7 +56,7 @@ function initWebGL() {
   if (gl) {
     setupWebGL();
     initShaders();
-    setupBuffers();
+    iniciarObjectos3D();
     tick();
   } else {
     alert("Error: Your browser does not appear to support WebGL.");
@@ -121,30 +124,24 @@ function makeShader(src, type) {
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-function setupBuffers() {
-  my_grid = new VertexGrid(4, 4);
-  my_grid.createUniformPlaneGrid();
-  my_grid.createIndexBuffer();
-  my_grid.setupWebGLBuffers();
-  animados = [my_grid];
-}
-
-function setupVertexShaderMatrix() {
+function setupVertexShaderMatrix(matrizModelado) {
 
   var modelMatrixUniform = gl.getUniformLocation(glProgram, "modelMatrix");
   var viewMatrixUniform = gl.getUniformLocation(glProgram, "viewMatrix");
   var projMatrixUniform = gl.getUniformLocation(glProgram, "projMatrix");
   var normalMatrixUniform = gl.getUniformLocation(glProgram, "normalMatrix");
 
-  gl.uniformMatrix4fv(modelMatrixUniform, false, modelMatrix);
+  var modelMatrixFinal = mat4.create();
+  mat4.multiply(modelMatrixFinal, modelMatrix, matrizModelado)
+  gl.uniformMatrix4fv(modelMatrixUniform, false, modelMatrixFinal);
   gl.uniformMatrix4fv(viewMatrixUniform, false, viewMatrix);
   gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
   gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 }
 
-function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndexBuffer) {
+function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndexBuffer, matrizModelado) {
 
-  setupVertexShaderMatrix();
+  setupVertexShaderMatrix(matrizModelado);
 
   vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
   gl.enableVertexAttribArray(vertexPositionAttribute);
@@ -157,8 +154,11 @@ function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndex
   gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, trianglesIndexBuffer);
-  // gl.drawElements(gl.TRIANGLE_STRIP, trianglesIndexBuffer.number_vertex_point, gl.UNSIGNED_SHORT, 0);
-  gl.drawElements(gl.LINE_STRIP, trianglesIndexBuffer.number_vertex_point, gl.UNSIGNED_SHORT, 0);
+  if (test) {
+    gl.drawElements(gl.LINE_STRIP, trianglesIndexBuffer.number_vertex_point, gl.UNSIGNED_SHORT, 0);
+  } else {
+    gl.drawElements(gl.TRIANGLE_STRIP, trianglesIndexBuffer.number_vertex_point, gl.UNSIGNED_SHORT, 0);
+  }
 }
 
 function animate() {
@@ -185,3 +185,9 @@ function tick() {
 }
 
 window.onload = loadVertexShader;
+
+$('body').on("keydown", function(event) {
+  if (event.keyCode == 84) {
+    test = !test;
+  }
+});
