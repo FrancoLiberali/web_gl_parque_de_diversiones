@@ -5,12 +5,12 @@ function Objeto3D() {
   this.normalBuffer = null;
   this.colorBuffer = null;
 
-	this.vertex_array = [];
+  this.vertex_array = [];
   this.index_array = [];
   this.normal_array = [];
   this.color_array = [];
 
-  this.matrizModelado;
+  this.matrizModelado = mat4.create();
   this.matrizPadre;
 
   this.hijos = [];
@@ -52,7 +52,7 @@ function Objeto3D() {
     this.normal_array = normalArray;
   }
 
-	this.setColor = function(colorArray) {
+  this.setColor = function(colorArray) {
     this.color_array = colorArray;
   }
 
@@ -71,19 +71,22 @@ function Objeto3D() {
 
     if (this.vertexBuffer && this.indexBuffer && this.normalBuffer) {
       // dibujar la geometria del objeto, segun la tranformacion de "mat"
-      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer);
+      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.matrizModelado);
 
     }
 
     if (this.hijos.length > 0) {
 
-      for (var i = 0; i < this.hijos.lenght; i++) {
-
+      for (var i = 0; i < this.hijos.length; i++) {
         this.hijos[i].dibujar(mat);
       }
     }
 
 
+  }
+
+  this.transladar = function(x, y, z) {
+    mat4.translate(this.matrizModelado, this.matrizModelado, [x, y, z]);
   }
 
   this.setPosicion = function(x, y, z) {
@@ -100,8 +103,7 @@ function Objeto3D() {
   }
 
   this.agregarHijo = function(obj) {
-
-    // agregar obj a hijos
+    this.hijos.push(obj);
   }
 
 

@@ -35,5 +35,5 @@ function GrillaPlana(_rows, _cols) {
     };
   }
   this.crearGrillaPlana();
-	this.setupWebGLBuffers();
+  this.setupWebGLBuffers();
 }
