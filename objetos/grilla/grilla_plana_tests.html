@@ -19,10 +19,18 @@
 		}
 	</style>
 
-	<script type="text/javascript" src="../gl_matrix/gl-matrix.js"></script>
-	<script type="text/javascript" src="../underscore-min.js"></script>
-	<script type="text/javascript" src="../animador/animador.js"></script>
-	<script type="text/javascript" src="grilla.js"></script>
+	<script type="text/javascript" src="../../lib/gl-matrix-min.js"></script>
+	<script type="text/javascript" src="../../lib/underscore-min.js"></script>
+	<script type="text/javascript" src="../../animador.js"></script>
+	<script type="text/javascript" src="../index_array.js"></script>
+	<script type="text/javascript" src="../objeto3d.js"></script>
+	<script type="text/javascript" src="grilla_plana.js"></script>
+
+	<script>
+		function iniciarObjectos3D() {
+			animados.push(new GrillaPlana(6, 4));
+		}
+	</script>
 </head>
 
 <body>

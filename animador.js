@@ -17,6 +17,8 @@ var projMatrix = mat4.create();
 var normalMatrix = mat4.create();
 var rotate_angle = -1.57078;
 
+var animados = [];
+
 function loadShader(url, callback) {
 
   var req = new XMLHttpRequest();
@@ -31,9 +33,9 @@ var vs_source = "";
 var fs_source = "";
 
 function loadVertexShader() {
-  loadShader("../glsl/vertex1.glsl", function(code) {
+  loadShader("../../glsl/vertex1.glsl", function(code) {
     vs_source = code;
-    loadShader("../glsl/fragment1.glsl", function(code) {
+    loadShader("../../glsl/fragment1.glsl", function(code) {
       fs_source = code;
       initWebGL();
     })
@@ -53,7 +55,7 @@ function initWebGL() {
   if (gl) {
     setupWebGL();
     initShaders();
-    setupBuffers();
+    iniciarObjectos3D();
     tick();
   } else {
     alert("Error: Your browser does not appear to support WebGL.");
@@ -120,14 +122,6 @@ function makeShader(src, type) {
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-
-function setupBuffers() {
-  my_grid = new VertexGrid(4, 4);
-  my_grid.createUniformPlaneGrid();
-  my_grid.createIndexBuffer();
-  my_grid.setupWebGLBuffers();
-  animados = [my_grid];
-}
 
 function setupVertexShaderMatrix() {
 
