@@ -1,5 +1,6 @@
 var mat4 = glMatrix.mat4;
 var vec3 = glMatrix.vec3;
+var vec4 = glMatrix.vec4;
 
 var gl = null,
   canvas = null,

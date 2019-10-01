@@ -15,7 +15,7 @@ function Objeto3D() {
 
   this.hijos = [];
 
-  this.posicion; // x,y,z
+  this.posicion = vec3.create(); // x,y,z
   this.ejeRotacion; // x,y,z
   this.anguloRotacion // angulo
   this.escala; // x,y,z

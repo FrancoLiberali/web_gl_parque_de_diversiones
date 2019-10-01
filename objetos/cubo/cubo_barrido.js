@@ -30,6 +30,10 @@ function llenarNivel(vertexArray, formaEnNivel) {//superficie){
     return vertexArray
 }
 
+function mat4xvec3(m4, v3){
+  return vec4.fromValues()
+}
+
 function barrido(curva, pasos, superficie_ini){
 
     var vertexArray = [];
@@ -41,13 +45,19 @@ function barrido(curva, pasos, superficie_ini){
         var binormal = vec3.create();
         var normal = vec3.create();
         var ctg = calcularTangente(curva(i/pasos), curva((i+1)/pasos));
-        var binormal = vec3.multiply(binormal, ctg, vec3.fromValues(0,0,1));
-        var normal = vec3.multiply(normal, ctg, binormal);
+        var binormal = vec3.cross(binormal, vec3.fromValues(0,0,1), ctg);
+        var normal = vec3.cross(normal, ctg, binormal);
+
+        //var m1 = mat4.fromValues(binormal.x, normal.x, ctg.x, curva(i).x,
+        //                         binormal.y, normal.y, ctg.y, curva(i).y,
+        //                         binormal.z, normal.z, ctg.z, curva(i).z,
+        //                         0         , 0       , 0    , 1
+        //                        );
 
         var m1 = mat4.fromValues(binormal[0], binormal[1], binormal[2], 0,
-					normal[0], normal[1], normal[2], 0,
-					ctg[0], ctg[1], ctg[2], 0,
-					curva(i)[0], curva(i)[1], curva(i)[2], 1
+					                       normal[0]  , normal[1]  , normal[2]   , 0,
+					                       ctg[0]     , ctg[1]     , ctg[2]      , 0,
+					                       curva(i)[0], curva(i)[1], curva(i)[2] , 1
         );
 
         //m1=mat4.create();
@@ -58,6 +68,8 @@ function barrido(curva, pasos, superficie_ini){
 
             var formaEnNivel = vec3.create();
             vec3.transformMat4(formaEnNivel, superficie[punto], m1); // creo que esta haciendo la multiplicacion a derecha en lugar de izquierda
+
+            superficie[punto] = formaEnNivel;
 
             vertexArray = llenarNivel(vertexArray, formaEnNivel);
 
@@ -80,7 +92,7 @@ function Cubo() {
       vec3.fromValues(0.0, 1.0, 0.0)];
 
 			var recta = function(t){
-			    return vec3.fromValues(0,0,t);
+			    return vec3.fromValues(t,0,0);
 			}
 
     this.vertex_array = barrido(recta, pasos, superficie_ini);
