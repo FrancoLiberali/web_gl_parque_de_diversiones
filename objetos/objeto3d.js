@@ -81,8 +81,6 @@ function Objeto3D() {
         this.hijos[i].dibujar(mat);
       }
     }
-
-
   }
 
   this.transladar = function(x, y, z) {
@@ -111,5 +109,4 @@ function Objeto3D() {
 
     // quitar obj de hijos;
   }
-
 }
