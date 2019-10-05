@@ -35,9 +35,9 @@ var vs_source = "";
 var fs_source = "";
 
 function loadVertexShader() {
-  loadShader("../../glsl/vertex1.glsl", function(code) {
+  loadShader("../../../glsl/vertex1.glsl", function(code) {
     vs_source = code;
-    loadShader("../../glsl/fragment1.glsl", function(code) {
+    loadShader("../../../glsl/fragment1.glsl", function(code) {
       fs_source = code;
       initWebGL();
     })
