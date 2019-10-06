@@ -15,9 +15,6 @@ function Cubo() {
 
     barrido(this.vertex_array, this.index_array, superficieInicial, recta, discretizacion);
 
-    // aun no se usa, se esta pintando según las normales
-    this.color_array = [];
-
     this.normal_array = [
       // cualquier cosa
       0.0, 0.0, 0.0,
