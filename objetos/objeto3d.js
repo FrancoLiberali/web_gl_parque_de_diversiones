@@ -1,4 +1,4 @@
-function Objeto3D() {
+function Objeto3D(conTapa) {
   // Si los buffers son nulos, el objeto actua solo como contenedor
   this.vertexBuffer = null;
   this.indexBuffer = null;
@@ -9,6 +9,7 @@ function Objeto3D() {
   this.index_array = [];
   this.normal_array = [];
   this.color_array = [];
+  this.conTapa = conTapa;
 
   this.matrizModelado = mat4.create();
   this.matrizPadre;

@@ -2,6 +2,11 @@ function Circulo(radio, discretizacion, limite = 2 * Math.PI) {
   this.puntos = [];
   this.normales = [];
   this.limite = limite;
+  this.centro = vec3.fromValues(0.0, 0.0, 0.0);
+
+  this.cantidadDePuntos = function() {
+    return this.puntos.length;
+  };
 
   this.crearCirculo = function() {
     var anguloDiscretizacion = 2 * Math.PI / discretizacion;

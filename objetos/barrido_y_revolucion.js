@@ -18,62 +18,90 @@ function aplicarTransfomacionAVectores(array, matrizTransformacion, vectores) {
   });
 }
 
-function aplicarTransfomacion(vertexArray, normalArray, matrizTransformacion, puntos, normales) {
+function aplicarTransfomacion(vertexArray, normalArray, matrizTransformacion, forma) {
   var matrizTransformacionNormales = mat4.create();
   mat4.invert(matrizTransformacionNormales, matrizTransformacion);
   mat4.transpose(matrizTransformacionNormales, matrizTransformacionNormales);
 
   // Se aplica la tranformacion correspondiente a cada punto
-  aplicarTransfomacionAVectores(vertexArray, matrizTransformacion, puntos);
+  aplicarTransfomacionAVectores(vertexArray, matrizTransformacion, forma.puntos);
   // Se aplica la tranformacion correspondiente a cada normal
-  aplicarTransfomacionAVectores(normalArray, matrizTransformacionNormales, normales);
+  aplicarTransfomacionAVectores(normalArray, matrizTransformacionNormales, forma.normales);
+}
+
+function agregarTapa(vertexArray, normalArray, forma, normal, matrizDeNivel) {
+  aplicarTransfomacionAVectores(vertexArray, matrizDeNivel, forma.puntos);
+  _.each(forma.puntos, function(punto) {
+    // Agrego la normal para todos los puntos de la tapa
+    llenarArray(normalArray, normal);
+  });
+
+  var centroTransformado = vec3.create();
+  vec3.transformMat4(centroTransformado, forma.centro, matrizDeNivel);
+  _.each(forma.puntos, function(punto) {
+    // pongo un nuevo nivel con todos en el punto central
+    llenarArray(vertexArray, centroTransformado);
+    // el centro tambien tiene esa normal
+    llenarArray(normalArray, normal);
+  });
 }
 
 NORMAL_HACIA_ARRIBA = vec3.fromValues(0, 0, 1);
 
-function barrido(vertexArray, indexArray, normalArray, superficie, normales, curva, pasoDiscretizacion) {
+function barrido(vertexArray, indexArray, normalArray, forma, curva, pasoDiscretizacion, conTapa) {
 
   var cantNiveles = 0;
+  var tangente = null;
+  var matrizDeNivel = null;
+
   for (var t = curva.limiteInferior; t <= curva.limiteSuperior; t += pasoDiscretizacion) {
     cantNiveles += 1;
     var binormal = vec3.create();
     var normal = vec3.create();
-    var tangente = curva.derivadaEn(t);
+    tangente = curva.derivadaEn(t);
     vec3.normalize(tangente, tangente);
     var binormal = vec3.cross(binormal, tangente, NORMAL_HACIA_ARRIBA);
     var normal = vec3.cross(normal, binormal, tangente);
 
     var translacion = curva.evaluarEn(t);
-    var matrizDeNivel = mat4.fromValues(
+    matrizDeNivel = mat4.fromValues(
       binormal[X], binormal[Y], binormal[Z], 0,
       tangente[X], tangente[Y], tangente[Z], 0,
       normal[X], normal[Y], normal[Z], 0,
       translacion[X], translacion[Y], translacion[Z], 1
     );
 
-    aplicarTransfomacion(vertexArray, normalArray, matrizDeNivel, superficie, normales);
-  }
+    if (cantNiveles === 1 && conTapa) {
+      cantNiveles += 2;
+      agregarTapa(vertexArray, normalArray, forma, tangente, matrizDeNivel);
+    }
 
-  crearIndexArray(indexArray, cantNiveles, superficie.length);
+    aplicarTransfomacion(vertexArray, normalArray, matrizDeNivel, forma);
+  }
+  if (conTapa) {
+    cantNiveles += 2;
+    agregarTapa(vertexArray, normalArray, forma, tangente, matrizDeNivel);
+  }
+  crearIndexArray(indexArray, cantNiveles, forma.cantidadDePuntos());
 }
 
-function aplicarRotacion(vertexArray, normalArray, angulo, eje, curva, normales) {
+function aplicarRotacion(vertexArray, normalArray, angulo, eje, forma) {
   var matrizRotacion = mat4.create();
   mat4.fromRotation(matrizRotacion, angulo, eje);
 
-  aplicarTransfomacion(vertexArray, normalArray, matrizRotacion, curva, normales);
+  aplicarTransfomacion(vertexArray, normalArray, matrizRotacion, forma);
 }
 
-function revolucion(vertexArray, indexArray, normalArray, curva, normales, eje, paso) {
+function revolucion(vertexArray, indexArray, normalArray, forma, eje, paso) {
 
   var cantNiveles = 0;
   for (var angulo = 0; angulo <= 2 * Math.PI; angulo += paso) {
     cantNiveles += 1;
-    aplicarRotacion(vertexArray, normalArray, angulo, eje, curva, normales);
+    aplicarRotacion(vertexArray, normalArray, angulo, eje, forma);
   }
   // por si por cuestiones de presicion se saltea el 2pi
   cantNiveles += 1;
-  aplicarRotacion(vertexArray, normalArray, 2 * Math.PI, eje, curva, normales);
+  aplicarRotacion(vertexArray, normalArray, 2 * Math.PI, eje, forma);
 
-  crearIndexArray(indexArray, cantNiveles, curva.length);
+  crearIndexArray(indexArray, cantNiveles, forma.cantidadDePuntos());
 }
