@@ -87,12 +87,12 @@ function Objeto3D() {
     mat4.translate(this.matrizModelado, this.matrizModelado, [x, y, z]);
   }
 
-  this.setPosicion = function(x, y, z) {
-    // guarda la posicion
+  this.rotar = function(anguloRotacion, ejeRotacion) {
+    mat4.rotate(this.matrizModelado, this.matrizModelado, anguloRotacion, ejeRotacion);
   }
 
-  this.setRotacion = function(angulo, x, y, z) {
-    // guarda la rotacion
+  this.setPosicion = function(x, y, z) {
+    // guarda la posicion
   }
 
   this.setEscala = function(x, y, z) {
