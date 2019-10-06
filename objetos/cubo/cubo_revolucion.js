@@ -9,7 +9,7 @@ function Cubo() {
 
     var dimension = dimensionGrillaRevolucion(curvaInicial, pasos);
 
-    this.index_array = crearIndexArray(dimension[0], dimension[1]);
+    crearIndexArray(this.index_array, dimension[0], dimension[1]);
 
     this.vertex_array = revolucion(curvaInicial, vec3.fromValues(0.0, 0.0, 1.0), pasos);
     this.color_array = [

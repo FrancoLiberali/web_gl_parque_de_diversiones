@@ -2,7 +2,6 @@ function Cubo() {
   Objeto3D.call(this);
 
   this.crearCubo = function() {
-    this.index_array = crearIndexArray(3, 5);
     var superficieInicial = [
       vec3.fromValues(0.0, 0.0, 1.0),
       vec3.fromValues(1.0, 0.0, 1.0),
@@ -14,7 +13,7 @@ function Cubo() {
     var recta = new RectaEnY(0, 2);
     var discretizacion = 1;
 
-    barrido(this.vertex_array, superficieInicial, recta, discretizacion);
+    barrido(this.vertex_array, this.index_array, superficieInicial, recta, discretizacion);
 
     // aun no se usa, se esta pintando según las normales
     this.color_array = [];

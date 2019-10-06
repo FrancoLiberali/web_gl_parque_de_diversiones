@@ -1,7 +1,7 @@
 function llenarNivel(vertexArray, formaEnNivel) {
-  vertexArray.push(formaEnNivel[0]);
-  vertexArray.push(formaEnNivel[1]);
-  vertexArray.push(formaEnNivel[2]);
+  vertexArray.push(formaEnNivel[X]);
+  vertexArray.push(formaEnNivel[Y]);
+  vertexArray.push(formaEnNivel[Z]);
 }
 
 NORMAL_HACIA_ARRIBA = vec3.fromValues(0, 0, 1);
@@ -9,10 +9,12 @@ X = 0
 Y = 1
 Z = 2
 
-function barrido(vertexArray, superficieInicial, curva, pasoDiscretizacion) {
+function barrido(vertexArray, indexArray, superficieInicial, curva, pasoDiscretizacion) {
 
   var superficie = superficieInicial;
+  var cantNiveles = 0;
   for (var t = curva.limiteInferior; t <= curva.limiteSuperior; t += pasoDiscretizacion) {
+    cantNiveles += 1;
     var binormal = vec3.create();
     var normal = vec3.create();
     var tangente = curva.derivadaEn(t);
@@ -38,5 +40,6 @@ function barrido(vertexArray, superficieInicial, curva, pasoDiscretizacion) {
       llenarNivel(vertexArray, puntoTransformado);
     });
   }
-  return vertexArray;
+
+  crearIndexArray(indexArray, cantNiveles, superficie.length);
 }
