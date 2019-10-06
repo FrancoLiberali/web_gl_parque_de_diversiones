@@ -2,7 +2,7 @@ function Cubo() {
   Objeto3D.call(this);
 
   this.crearCubo = function() {
-    this.index_array = crearIndexArray(2, 5);
+    this.index_array = crearIndexArray(3, 5);
     var superficieInicial = [
       vec3.fromValues(0.0, 0.0, 1.0),
       vec3.fromValues(1.0, 0.0, 1.0),
@@ -11,30 +11,13 @@ function Cubo() {
       vec3.fromValues(0.0, 0.0, 1.0)
     ];
 
-    var recta = function(t) {
-      return vec3.fromValues(0, t, 0);
-    }
-    var rectaDerivada = function(t) {
-      return vec3.fromValues(0, 1, 0);
-    }
+    var recta = new RectaEnY(0, 2);
+    var discretizacion = 1;
 
-    var pasos = 1;
+    barrido(this.vertex_array, superficieInicial, recta, discretizacion);
 
-    this.vertex_array = barrido(recta, rectaDerivada, pasos, superficieInicial);
-
-    this.color_array = [
-      // cualquier cosa
-      0.0, 0.0, 0.0,
-      1.0, 0.0, 0.0,
-      1.0, 0.0, 1.0,
-      0.0, 0.0, 1.0,
-      0.0, 1.0, 0.0,
-      1.0, 1.0, 0.0,
-      1.0, 1.0, 1.0,
-      0.0, 1.0, 1.0,
-      0.0, 1.0, 1.0,
-      0.0, 1.0, 1.0,
-    ];
+    // aun no se usa, se esta pintando según las normales
+    this.color_array = [];
 
     this.normal_array = [
       // cualquier cosa
@@ -43,6 +26,13 @@ function Cubo() {
       1.0, 0.0, 1.0,
       0.0, 0.0, 1.0,
       0.0, 1.0, 0.0,
+
+      1.0, 1.0, 0.0,
+      1.0, 1.0, 1.0,
+      0.0, 1.0, 1.0,
+      0.0, 1.0, 1.0,
+      0.0, 1.0, 1.0,
+
       1.0, 1.0, 0.0,
       1.0, 1.0, 1.0,
       0.0, 1.0, 1.0,
@@ -52,10 +42,10 @@ function Cubo() {
   }
   this.crearCubo();
   this.setupWebGLBuffers();
-  this.agregarHijo(new TapaCubo());
-  var otraTapa = new TapaCubo();
-  otraTapa.transladar(0.0, 1.0, 0.0);
-  this.agregarHijo(otraTapa);
+  // this.agregarHijo(new TapaCubo());
+  // var otraTapa = new TapaCubo();
+  // otraTapa.transladar(0.0, 1.0, 0.0);
+  // this.agregarHijo(otraTapa);
 }
 
 function TapaCubo() {
