@@ -3,7 +3,8 @@ function Cubo() {
 
   this.crearCubo = function() {
     var pasos = Math.PI / 2;
-    var curvaInicial = [vec3.fromValues(0.0, 1.0, 0.0),
+    var curvaInicial = [
+      vec3.fromValues(0.0, 1.0, 0.0),
       vec3.fromValues(0.0, 1.0, 1.0)
     ];
 

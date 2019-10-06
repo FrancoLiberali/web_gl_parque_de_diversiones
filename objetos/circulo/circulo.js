@@ -1,19 +1,22 @@
-function Circulo(radio, discretizacion) {
+function Circulo(radio, discretizacion, limite = 2 * Math.PI) {
   this.puntos = [];
   this.normales = [];
+  this.limite = limite;
 
   this.crearCirculo = function() {
     var anguloDiscretizacion = 2 * Math.PI / discretizacion;
-    for (var angulo = 0; angulo <= 2 * Math.PI; angulo += anguloDiscretizacion) {
+    for (var angulo = 0; angulo <= this.limite; angulo += anguloDiscretizacion) {
       var direccion = vec3.fromValues(Math.cos(angulo), 0.0, Math.sin(angulo));
       this.normales.push(direccion);
       vec3.scale(direccion, direccion, radio);
       this.puntos.push(direccion);
     }
-    // El primero otra vez para asegurarnos cerrar el circulo, ya que por cuestiones de floats
-    // no lo hace con 2pi
-    this.normales.push(vec3.fromValues(1.0, 0.0, 0.0));
-    this.puntos.push(vec3.fromValues(radio, 0.0, 0.0));
+    // Nos aseguramos que el limite este, ya que por cuestiones de floats
+    // puede no hacerlo con angulo = this.limite
+    var direccion = vec3.fromValues(Math.cos(this.limite), 0.0, Math.sin(this.limite));
+    this.normales.push(direccion);
+    vec3.scale(direccion, direccion, radio);
+    this.puntos.push(direccion);
   };
 
   this.crearCirculo();

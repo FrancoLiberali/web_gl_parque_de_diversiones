@@ -17,6 +17,7 @@ function Cubo(lado) {
     this.agregarTapa(0.0, 0.0, 0.0, Math.PI / 2, vec3.fromValues(0.0, 0.0, 1.0));
     this.agregarTapa(0.0, -this.lado, 0.0, Math.PI / 2, vec3.fromValues(0.0, 0.0, 1.0));
   }
+
   this.crearCubo();
   this.setupWebGLBuffers();
 }
