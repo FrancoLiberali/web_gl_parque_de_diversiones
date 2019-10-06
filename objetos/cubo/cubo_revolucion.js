@@ -2,15 +2,15 @@ function Cubo() {
   Objeto3D.call(this);
 
   this.crearCubo = function() {
-    var pasos = Math.PI/2;
-    var curvaInicial =
-     [vec3.fromValues(0.0, 1.0, 0.0),
-      vec3.fromValues(0.0, 1.0, 1.0)];
+    var pasos = Math.PI / 2;
+    var curvaInicial = [vec3.fromValues(0.0, 1.0, 0.0),
+      vec3.fromValues(0.0, 1.0, 1.0)
+    ];
 
     var dimension = dimensionGrillaRevolucion(curvaInicial, pasos);
 
     this.index_array = crearIndexArray(dimension[0], dimension[1]);
-    
+
     this.vertex_array = revolucion(curvaInicial, vec3.fromValues(0.0, 0.0, 1.0), pasos);
     this.color_array = [
       // cualquier cosa
