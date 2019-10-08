@@ -7,12 +7,13 @@ function iniciarObjectos3D() {
   sillas.agregarHijo(cilindro);
   var conoAbajo = new Cono(false, false);
   conoAbajo.escalar(1.0, 0.20, 1.0);
+  conoAbajo.rotar(Math.PI, vec3.fromValues(0.0, 0.0, 1.0));
+  conoAbajo.transladar(0.0, 0.2, 0.0);
   sillas.agregarHijo(conoAbajo);
 
   var conoArriba = new Cono(false, false);
   conoArriba.escalar(1.0, 0.20, 1.0);
-  conoArriba.rotar(Math.PI, vec3.fromValues(0.0, 0.0, 1.0));
-  conoArriba.transladar(0.0, 0.30 + 0.2 + 0.2, 0.0);
+  conoArriba.transladar(0.0, 0.30 + 0.2, 0.0);
   sillas.agregarHijo(conoArriba);
 
   animados.push(sillas);
