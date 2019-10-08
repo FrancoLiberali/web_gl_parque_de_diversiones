@@ -3,7 +3,7 @@ function Cono(conTapa, conEjes) {
 
   this.crearCono = function() {
 
-    var circulo = new Circulo(1, 16);
+    var circulo = new Circulo(1, 32);
     var recta = new RectaEnY(0, 1);
     var escalas = function(t) {
       return vec3.fromValues(t, t, t);

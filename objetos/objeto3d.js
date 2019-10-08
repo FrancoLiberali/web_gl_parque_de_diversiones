@@ -24,11 +24,11 @@ function Objeto3D(conTapa, conEjes = false) {
     this.ejes.push(ejeX);
     var ejeY = new Eje("y");
     ejeY.rotar(Math.PI / 2, vec3.fromValues(0.0, 0.0, 1.0));
-    ejeY.transladar(0.0, -LADO_EJE, 0.0);
+    ejeY.transladar(LADO_EJE, 0.0, 0.0);
     this.ejes.push(ejeY);
     var ejeZ = new Eje("z");
     ejeZ.rotar(Math.PI / 2, vec3.fromValues(0.0, -1.0, 0.0));
-    ejeZ.transladar(0.0, 0.0, -LADO_EJE);
+    ejeZ.transladar(LADO_EJE, 0.0, 0.0);
     this.ejes.push(ejeZ);
   }
 
@@ -102,7 +102,9 @@ function Objeto3D(conTapa, conEjes = false) {
   }
 
   this.transladar = function(x, y, z) {
-    mat4.translate(this.matrizModelado, this.matrizModelado, [x, y, z]);
+    var matrizTranslacion = mat4.create();
+    mat4.translate(matrizTranslacion, matrizTranslacion, [x, y, z]);
+    mat4.multiply(this.matrizModelado, matrizTranslacion, this.matrizModelado);
   }
 
   this.rotar = function(anguloRotacion, ejeRotacion) {
@@ -112,7 +114,9 @@ function Objeto3D(conTapa, conEjes = false) {
   }
 
   this.escalar = function(x, y, z) {
-    mat4.scale(this.matrizModelado, this.matrizModelado, vec3.fromValues(x, y, z));
+    var matrizEscalado = mat4.create();
+    mat4.scale(matrizEscalado, matrizEscalado, vec3.fromValues(x, y, z));
+    mat4.multiply(this.matrizModelado, matrizEscalado, this.matrizModelado);
   }
 
   this.setPosicion = function(x, y, z) {
@@ -130,13 +134,13 @@ function Objeto3D(conTapa, conEjes = false) {
   }
 }
 
-LADO_EJE = 0.20
+LADO_EJE = 0.05
 function Eje(eje) {
   Cubo.call(this, LADO_EJE, true, false);
 
   this.usarColores = true;
   this.crearEje = function() {
-    this.escalar(10.0, 1.0, 1.0);
+    this.escalar(40.0, 1.0, 1.0);
     var color = [];
     if (eje === "x") {
       color = [1.0, 0.0, 0.0];
