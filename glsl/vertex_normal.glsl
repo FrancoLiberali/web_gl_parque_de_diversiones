@@ -1,8 +1,7 @@
-
 precision highp float;
 
-attribute vec3 aVertexPosition;	//atributo posicion
-attribute vec3 aVertexNormal;		//atributo normal
+attribute vec3 aVertexPosition;	// atributo posicion
+attribute vec3 aVertexNormal;		// atributo normal
 
 uniform mat4 modelMatrix;				// matriz de modelado
 uniform mat4 viewMatrix;				// matriz de vista
@@ -18,5 +17,4 @@ void main(void) {
 
 	vPosWorld=(modelMatrix*vec4(aVertexPosition,1.0)).xyz;	//la posicion en coordenadas de mundo
 	vNormal=(normalMatrix*vec4(aVertexNormal,1.0)).xyz;			//la normal en coordenadas de mundo
-
 }

@@ -6,11 +6,16 @@ var gl = null,
   canvas = null,
 
   glProgram = null,
-  fragmentShader = null,
-  vertexShader = null;
+  glNormalProgram = null,
+  glColorProgram = null,
+  fragmentNormalShader = null,
+  fragmentColorShader = null,
+  vertexColorShader = null,
+  vertexNormalShader = null;
 
 var vertexPositionAttribute = null,
-  vertexNormalAttribute = null;
+  vertexNormalAttribute = null,
+  vertexColorAttribute = null;
 
 var rotationMatrix = mat4.create();
 var viewMatrix = mat4.create();
@@ -21,6 +26,7 @@ var rotate_angle = 0;
 var animados = [];
 var test = false;
 var rotate = false;
+var conEjes = false;
 
 function loadShader(url, callback) {
 
@@ -32,15 +38,23 @@ function loadShader(url, callback) {
   req.send();
 }
 
-var vs_source = "";
-var fs_source = "";
+var vs_normal_source = "";
+var fs_normal_source = "";
+var vs_color_source = "";
+var fs_color_source = "";
 
 function loadVertexShader() {
-  loadShader("../../glsl/vertex1.glsl", function(code) {
-    vs_source = code;
-    loadShader("../../glsl/fragment1.glsl", function(code) {
-      fs_source = code;
-      initWebGL();
+  loadShader("../../glsl/vertex_normal.glsl", function(code) {
+    vs_normal_source = code;
+    loadShader("../../glsl/fragment_normal.glsl", function(code) {
+      fs_normal_source = code;
+      loadShader("../../glsl/vertex_color.glsl", function(code) {
+        vs_color_source = code;
+        loadShader("../../glsl/fragment_color.glsl", function(code) {
+          fs_color_source = code;
+          initWebGL();
+        })
+      })
     })
   })
 };
@@ -89,23 +103,36 @@ function setupWebGL() {
 function initShaders() {
 
   //compile shaders
-  vertexShader = makeShader(vs_source, gl.VERTEX_SHADER);
-  fragmentShader = makeShader(fs_source, gl.FRAGMENT_SHADER);
+  vertexNormalShader = makeShader(vs_normal_source, gl.VERTEX_SHADER);
+  fragmentNormalShader = makeShader(fs_normal_source, gl.FRAGMENT_SHADER);
+  vertexColorShader = makeShader(vs_color_source, gl.VERTEX_SHADER);
+  fragmentColorShader = makeShader(fs_color_source, gl.FRAGMENT_SHADER);
 
   //create program
-  glProgram = gl.createProgram();
+  glColorProgram = gl.createProgram();
+  glNormalProgram = gl.createProgram();
 
-  //attach and link shaders to the program
-  gl.attachShader(glProgram, vertexShader);
-  gl.attachShader(glProgram, fragmentShader);
-  gl.linkProgram(glProgram);
+  // attach and link shaders to the program
+  gl.attachShader(glNormalProgram, vertexNormalShader);
+  gl.attachShader(glNormalProgram, fragmentNormalShader);
+  gl.linkProgram(glNormalProgram);
 
-  if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
+  if (!gl.getProgramParameter(glNormalProgram, gl.LINK_STATUS)) {
+    alert("Unable to initialize the shader program.");
+  }
+
+  // attach and link shaders to the program
+  gl.attachShader(glColorProgram, vertexColorShader);
+  gl.attachShader(glColorProgram, fragmentColorShader);
+  gl.linkProgram(glColorProgram);
+
+  if (!gl.getProgramParameter(glColorProgram, gl.LINK_STATUS)) {
     alert("Unable to initialize the shader program.");
   }
 
   //use program
-  gl.useProgram(glProgram);
+  glProgram = glColorProgram;
+  gl.useProgram(glColorProgram);
 }
 
 function makeShader(src, type) {
@@ -146,7 +173,25 @@ function setupVertexShaderMatrix(matrizModelado) {
   gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 }
 
-function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndexBuffer, matrizModelado) {
+function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndexBuffer, colorBuffer, matrizModelado, colors) {
+
+  if (colors) {
+    glProgram = glColorProgram;
+    gl.useProgram(glProgram);
+
+    vertexColorAttribute = gl.getAttribLocation(glColorProgram, "aVertexColor");
+    gl.enableVertexAttribArray(vertexColorAttribute);
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+  } else {
+    glProgram = glNormalProgram;
+    gl.useProgram(glNormalProgram);
+
+    vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
+    gl.enableVertexAttribArray(vertexNormalAttribute);
+    gl.bindBuffer(gl.ARRAY_BUFFER, trianglesNormalBuffer);
+    gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+  }
 
   setupVertexShaderMatrix(matrizModelado);
 
@@ -154,11 +199,6 @@ function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndex
   gl.enableVertexAttribArray(vertexPositionAttribute);
   gl.bindBuffer(gl.ARRAY_BUFFER, trianglesVerticeBuffer);
   gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-
-  vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
-  gl.enableVertexAttribArray(vertexNormalAttribute);
-  gl.bindBuffer(gl.ARRAY_BUFFER, trianglesNormalBuffer);
-  gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, trianglesIndexBuffer);
   if (test) {
@@ -181,19 +221,26 @@ function tick() {
 
   requestAnimationFrame(tick);
   _.each(animados, function(animado) {
-    animado.dibujar();
+    animado.dibujar(mat4.create(), conEjes);
   })
   animate();
 }
 
 window.onload = loadVertexShader;
 
+E = 69;
+T = 84;
+R = 82;
 $('body').on("keydown", function(event) {
-  if (event.keyCode == 84) {
+  if (event.keyCode == T) {
     test = !test;
   }
 
-  if (event.keyCode == 82) {
+  if (event.keyCode == R) {
     rotate = !rotate;
+  }
+
+  if (event.keyCode == E) {
+    conEjes = !conEjes;
   }
 });
