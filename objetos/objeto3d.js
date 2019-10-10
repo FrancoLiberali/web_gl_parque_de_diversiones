@@ -1,4 +1,4 @@
-function Objeto3D() {
+function Objeto3D(conTapa) {
   // Si los buffers son nulos, el objeto actua solo como contenedor
   this.vertexBuffer = null;
   this.indexBuffer = null;
@@ -9,6 +9,7 @@ function Objeto3D() {
   this.index_array = [];
   this.normal_array = [];
   this.color_array = [];
+  this.conTapa = conTapa;
 
   this.matrizModelado = mat4.create();
   this.matrizPadre;
@@ -87,12 +88,12 @@ function Objeto3D() {
     mat4.translate(this.matrizModelado, this.matrizModelado, [x, y, z]);
   }
 
-  this.setPosicion = function(x, y, z) {
-    // guarda la posicion
+  this.rotar = function(anguloRotacion, ejeRotacion) {
+    mat4.rotate(this.matrizModelado, this.matrizModelado, anguloRotacion, ejeRotacion);
   }
 
-  this.setRotacion = function(angulo, x, y, z) {
-    // guarda la rotacion
+  this.setPosicion = function(x, y, z) {
+    // guarda la posicion
   }
 
   this.setEscala = function(x, y, z) {

@@ -12,14 +12,15 @@ var gl = null,
 var vertexPositionAttribute = null,
   vertexNormalAttribute = null;
 
-var modelMatrix = mat4.create();
+var rotationMatrix = mat4.create();
 var viewMatrix = mat4.create();
 var projMatrix = mat4.create();
 var normalMatrix = mat4.create();
-var rotate_angle = -1.57078;
+var rotate_angle = 0;
 
 var animados = [];
 var test = false;
+var rotate = false;
 
 function loadShader(url, callback) {
 
@@ -78,8 +79,7 @@ function setupWebGL() {
 
   mat4.perspective(projMatrix, 45, canvas.width / canvas.height, 0.1, 100.0);
 
-  mat4.identity(modelMatrix);
-  mat4.rotate(modelMatrix, modelMatrix, -1.57078, [1.0, 0.0, 0.0]);
+  mat4.identity(rotationMatrix);
 
   mat4.identity(viewMatrix);
   mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -5.0]);
@@ -133,7 +133,13 @@ function setupVertexShaderMatrix(matrizModelado) {
   var normalMatrixUniform = gl.getUniformLocation(glProgram, "normalMatrix");
 
   var modelMatrixFinal = mat4.create();
-  mat4.multiply(modelMatrixFinal, modelMatrix, matrizModelado)
+  mat4.multiply(modelMatrixFinal, rotationMatrix, matrizModelado);
+
+  mat4.identity(normalMatrix);
+  mat4.multiply(normalMatrix, viewMatrix, modelMatrixFinal);
+  mat4.invert(normalMatrix, normalMatrix);
+  mat4.transpose(normalMatrix, normalMatrix);
+
   gl.uniformMatrix4fv(modelMatrixUniform, false, modelMatrixFinal);
   gl.uniformMatrix4fv(viewMatrixUniform, false, viewMatrix);
   gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
@@ -163,16 +169,11 @@ function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndex
 }
 
 function animate() {
-
-  rotate_angle += 0.01;
-  mat4.identity(modelMatrix);
-  mat4.rotate(modelMatrix, modelMatrix, rotate_angle, [1.0, 0.0, 1.0]);
-
-
-  mat4.identity(normalMatrix);
-  mat4.multiply(normalMatrix, viewMatrix, modelMatrix);
-  mat4.invert(normalMatrix, normalMatrix);
-  mat4.transpose(normalMatrix, normalMatrix);
+  if (rotate) {
+    rotate_angle += 0.01;
+    mat4.identity(rotationMatrix);
+    mat4.rotate(rotationMatrix, rotationMatrix, rotate_angle, [1.0, 0.0, 1.0]);
+  }
 
 }
 
@@ -190,5 +191,9 @@ window.onload = loadVertexShader;
 $('body').on("keydown", function(event) {
   if (event.keyCode == 84) {
     test = !test;
+  }
+
+  if (event.keyCode == 82) {
+    rotate = !rotate;
   }
 });
