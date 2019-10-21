@@ -7,7 +7,9 @@ function CurvaCubica(base, baseDer, puntosDeControl) {
 	this.ptos = puntosDeControl;
 	
 	//no hay suficientes puntos para armar una curva de Bezier
-	if((this.ptos.length-4)%3 != 0){
+	var tmp = (this.ptos.length-4)%3;
+
+	if(tmp != 0){
 		return null;		
 	}
 	this.cantidadDeCurvas = ((this.ptos.length-4)/3)+1;
