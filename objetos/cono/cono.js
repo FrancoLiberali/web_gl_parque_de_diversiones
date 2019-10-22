@@ -13,8 +13,8 @@ function Cono(conTapa, conEjes, porcentaje = MAX_PORCENTAJE) {
     var escalas = function(t) {
       return vec3.fromValues(1 - t, 1 - t, 1 - t);
     }
-    // hacer solo en dos niveles
-    var discretizacion = limite;
+    // hacer solo en cuatro niveles
+    var discretizacion = limite / 2;
 
     barrido(
       this.vertex_array,

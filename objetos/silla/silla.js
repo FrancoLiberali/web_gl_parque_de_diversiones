@@ -1,10 +1,10 @@
-function Silla() {
-  Objeto3D.call(this, true, true);
+function Silla(conEjes = false) {
+  Objeto3D.call(this, true, conEjes);
 
   this.crearSilla = function() {
 
     var forma = new FormaDeSilla();
-    var recta = new RectaEnY(0, 2);
+    var recta = new RectaEnY(0, 1);
     var discretizacion = 1;
 
     barrido(

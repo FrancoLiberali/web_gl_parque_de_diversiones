@@ -1,5 +1,5 @@
-function Cilindro(conTapa = false) {
-  Objeto3D.call(this, conTapa);
+function Cilindro(conTapa = false, conEjes) {
+  Objeto3D.call(this, conTapa, conEjes);
 
   this.crearCilindro = function() {
 
