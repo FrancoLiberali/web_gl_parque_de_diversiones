@@ -1,8 +1,6 @@
-var girable;
-
 function iniciarObjectos3D() {
   var h = 1;
-  var cant_sillas = 12;
+  var cant_sillas = 3;
   // es un contenedor
   var sillas = new Objeto3D(false, true);
   //
@@ -34,7 +32,7 @@ function iniciarObjectos3D() {
   girable.agregarHijo(tercerCilindro);
 
   TAMAÑO_ROTABLE = 1.2;
-  var rotable = new Objeto3D(false, true);
+  rotable = new Objeto3D(false, true);
   rotable.transladar(0.0, 1.0 * h + 0.05, 0.0);
   girable.agregarHijo(rotable);
 
@@ -58,7 +56,8 @@ function iniciarObjectos3D() {
   var i;
   var anguloDiscretizacion = 2 * Math.PI / cant_sillas;
   TAMAÑO_SILLA = 0.2;
-  TAMAÑO_CABLE = 1.4;
+  EXTRA_TAMAÑO_CABLE = 0.3;
+  TAMAÑO_CABLE = h + EXTRA_TAMAÑO_CABLE;
   DISTANCIA_CABLE_CENTRO = 0.9;
   for (i = 0; i < cant_sillas; i++) {
     var sillaCable = new Objeto3D(false, true);
@@ -68,14 +67,14 @@ function iniciarObjectos3D() {
     sillasCables << sillaCable;
 
     var cable = new Cilindro(false, false);
-    cable.escalar(0.02, TAMAÑO_CABLE * h, 0.02);
-    cable.transladar(0.0, -TAMAÑO_CABLE * h, 0.0);
+    cable.escalar(0.02, TAMAÑO_CABLE, 0.02);
+    cable.transladar(0.0, -TAMAÑO_CABLE, 0.0);
     sillaCable.agregarHijo(cable);
 
     var silla = new Silla(true);
     silla.escalar(TAMAÑO_SILLA, TAMAÑO_SILLA, TAMAÑO_SILLA);
     silla.rotar(Math.PI / 2, vec3.fromValues(0.0, 0.0, 1.0));
-    silla.transladar(0.0, -TAMAÑO_CABLE * h, 0.0);
+    silla.transladar(0.0,  -TAMAÑO_CABLE, 0.0);
     silla.transladar(TAMAÑO_SILLA / 2, -TAMAÑO_SILLA, -0.025);
     silla.rotar(-angulo, vec3.fromValues(0.0, 1.0, 0.0));
     sillaCable.agregarHijo(silla);
