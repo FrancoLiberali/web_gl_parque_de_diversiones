@@ -1,10 +1,10 @@
-function Cilindro(conTapa = false) {
-  Objeto3D.call(this, conTapa);
+function Cilindro(conTapa = false, conEjes) {
+  Objeto3D.call(this, conTapa, conEjes);
 
   this.crearCilindro = function() {
 
-    var circulo = new Circulo(1, 16);
-    var recta = new RectaEnY(0, 2);
+    var circulo = new Circulo(1, 32);
+    var recta = new RectaEnY(0, 1);
     var discretizacion = 1;
 
     barrido(

@@ -35,13 +35,16 @@
 
 	<script>
 		function iniciarObjectos3D() {
-			animados.push(new Cubo(1.0, true, true));
+			var eje = new Eje("y")
+			eje.rotar(Math.PI / 2, vec3.fromValues(0.0, 0.0, 1.0));
+			animados.push(eje);
+
 		}
 	</script>
 
 	<center>
 		<h1>Sistemas Gráficos - 66.71</h1>
-		<h2>WebGL - Cubo</h2>
+		<h2>WebGL - Eje</h2>
 		<canvas id="my-canvas" width="900" height="500">
 			Your browser does not support the HTML5 canvas element.
 		</canvas>

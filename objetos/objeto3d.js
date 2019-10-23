@@ -1,4 +1,4 @@
-function Objeto3D(conTapa) {
+function Objeto3D(conTapa, conEjes = false) {
   // Si los buffers son nulos, el objeto actua solo como contenedor
   this.vertexBuffer = null;
   this.indexBuffer = null;
@@ -10,11 +10,27 @@ function Objeto3D(conTapa) {
   this.normal_array = [];
   this.color_array = [];
   this.conTapa = conTapa;
+  this.conEjes = conEjes;
 
   this.matrizModelado = mat4.create();
+  mat4.identity(this.matrizModelado);
   this.matrizPadre;
 
   this.hijos = [];
+
+  this.ejes = [];
+  if (this.conEjes) {
+    var ejeX = new Eje("x");
+    this.ejes.push(ejeX);
+    var ejeY = new Eje("y");
+    ejeY.rotar(Math.PI / 2, vec3.fromValues(0.0, 0.0, 1.0));
+    ejeY.transladar(LADO_EJE, 0.0, 0.0);
+    this.ejes.push(ejeY);
+    var ejeZ = new Eje("z");
+    ejeZ.rotar(Math.PI / 2, vec3.fromValues(0.0, -1.0, 0.0));
+    ejeZ.transladar(LADO_EJE, 0.0, 0.0);
+    this.ejes.push(ejeZ);
+  }
 
   this.posicion = vec3.create(); // x,y,z
   this.ejeRotacion; // x,y,z
@@ -53,52 +69,58 @@ function Objeto3D(conTapa) {
     this.normal_array = normalArray;
   }
 
-  this.setColor = function(colorArray) {
-    this.color_array = colorArray;
+  this.setColorUniforme = function(color) {
+    for (i = 0; i <= this.vertex_array.length; i += 1) {
+      this.color_array.push(color[0]);
+      this.color_array.push(color[1]);
+      this.color_array.push(color[2]);
+    }
   }
 
-  this.dibujar = function(m) {
-
-    var mat; // guardo la matriz de transformacion final que voy a usar para dibujar el objeto
-
-    matrizPadre = m;
-
-
-    // actualizar matrizModelado segun posicion, ejeRotacion,anguloRotacion y escala
-    // matrizModelado =  matTraslacion * matRotacion * matEscalado;
-
-    // calcular matriz final
-    // mat = matrizPadre * matrizModelado
+  this.dibujar = function(matrizPadre, conEjes) {
+    var matrizModeladoFinal = mat4.create();
+    mat4.multiply(matrizModeladoFinal, matrizPadre, this.matrizModelado);
 
     if (this.vertexBuffer && this.indexBuffer && this.normalBuffer) {
-      // dibujar la geometria del objeto, segun la tranformacion de "mat"
-      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.matrizModelado);
+      // dibujar la geometria del objeto, segun la tranformacion de "matrizModeladoFinal"
+      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColores);
 
     }
 
     if (this.hijos.length > 0) {
 
       for (var i = 0; i < this.hijos.length; i++) {
-        this.hijos[i].dibujar(mat);
+        this.hijos[i].dibujar(matrizModeladoFinal, conEjes);
+      }
+    }
+
+    if (conEjes && this.ejes.length > 0) {
+      for (var i = 0; i < this.ejes.length; i++) {
+        this.ejes[i].dibujar(matrizModeladoFinal, conEjes);
       }
     }
   }
 
   this.transladar = function(x, y, z) {
-    mat4.translate(this.matrizModelado, this.matrizModelado, [x, y, z]);
+    var matrizTranslacion = mat4.create();
+    mat4.translate(matrizTranslacion, matrizTranslacion, [x, y, z]);
+    mat4.multiply(this.matrizModelado, matrizTranslacion, this.matrizModelado);
   }
 
   this.rotar = function(anguloRotacion, ejeRotacion) {
-    mat4.rotate(this.matrizModelado, this.matrizModelado, anguloRotacion, ejeRotacion);
+    var matrizRotacion = mat4.create();
+    mat4.rotate(matrizRotacion, matrizRotacion, anguloRotacion, ejeRotacion);
+    mat4.multiply(this.matrizModelado, matrizRotacion, this.matrizModelado);
+  }
+
+  this.escalar = function(x, y, z) {
+    var matrizEscalado = mat4.create();
+    mat4.scale(matrizEscalado, matrizEscalado, vec3.fromValues(x, y, z));
+    mat4.multiply(this.matrizModelado, matrizEscalado, this.matrizModelado);
   }
 
   this.setPosicion = function(x, y, z) {
     // guarda la posicion
-  }
-
-  this.setEscala = function(x, y, z) {
-    // guarda la escala
-
   }
 
   this.agregarHijo = function(obj) {
@@ -110,4 +132,25 @@ function Objeto3D(conTapa) {
 
     // quitar obj de hijos;
   }
+}
+
+LADO_EJE = 0.05
+function Eje(eje) {
+  Cubo.call(this, LADO_EJE, true, false);
+
+  this.usarColores = true;
+  this.crearEje = function() {
+    this.escalar(40.0, 1.0, 1.0);
+    var color = [];
+    if (eje === "x") {
+      color = [1.0, 0.0, 0.0];
+    } else if (eje === "y") {
+      color = [0.0, 1.0, 0.0];
+    } else {
+      color = [0.0, 0.0, 1.0];
+    }
+    this.setColorUniforme(color);
+  }
+  this.crearEje();
+  this.setupWebGLBuffers();
 }

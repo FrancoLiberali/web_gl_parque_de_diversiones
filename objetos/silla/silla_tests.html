@@ -27,21 +27,22 @@
 	<script type="text/javascript" src="../../animador.js"></script>
 	<script type="text/javascript" src="../index_array.js"></script>
 	<script type="text/javascript" src="../objeto3d.js"></script>
+	<script type="text/javascript" src="../cubo/cubo.js"></script>
 	<script type="text/javascript" src="../barrido_y_revolucion.js"></script>
 	<script type="text/javascript" src="../../curvas/curva.js"></script>
 	<script type="text/javascript" src="../../curvas/rectas.js"></script>
 	<script type="text/javascript" src="../formas/formas.js"></script>
-	<script type="text/javascript" src="cubo.js"></script>
+	<script type="text/javascript" src="silla.js"></script>
 
 	<script>
 		function iniciarObjectos3D() {
-			animados.push(new Cubo(1.0, true, true));
+			animados.push(new Silla());
 		}
 	</script>
 
 	<center>
 		<h1>Sistemas Gráficos - 66.71</h1>
-		<h2>WebGL - Cubo</h2>
+		<h2>WebGL - Silla</h2>
 		<canvas id="my-canvas" width="900" height="500">
 			Your browser does not support the HTML5 canvas element.
 		</canvas>

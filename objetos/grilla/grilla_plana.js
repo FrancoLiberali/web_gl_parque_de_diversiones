@@ -9,7 +9,7 @@ function GrillaPlana(_rows, _cols) {
   // El propósito de esta función es a modo de ejemplo de como inicializar y cargar
   // los buffers de las posiciones y el color para cada vértice.
   this.crearGrillaPlana = function() {
-    this.index_array = crearIndexArray(this.rows, this.cols);
+    crearIndexArray(this.index_array, this.rows, this.cols);
 
     for (var i = 0.0; i < this.rows; i++) {
       for (var j = 0.0; j < this.cols; j++) {
