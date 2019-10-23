@@ -3,9 +3,10 @@ function Cilindro(conTapa = false) {
 
   this.crearCilindro = function() {
 
-    var circulo = new Circulo(1, 16);
-    var recta = new RectaEnY(0, 2);
-    var discretizacion = 1;
+    //var circulo = new Circulo(1, 16);
+    var circulo = new CirculoB();
+    var recta = new RectaEnY(0, 0.15);
+    var discretizacion = 0.15;
 
     barrido(
       this.vertex_array,

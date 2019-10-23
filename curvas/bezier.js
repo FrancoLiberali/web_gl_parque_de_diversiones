@@ -24,5 +24,28 @@ function Bezier(puntosDeControl) {
 	this.base = [this.base0,this.base1,this.base2,this.base3];
 	this.baseDer = [this.base0der, this.base1der, this.base2der, this.base3der];
 	
+	//no hay suficientes puntos para armar una curva de Bezier cubica
+	var tmp = (this.ptos.length-4)%3;
+
+	if(tmp != 0){
+		return null;		
+	}
+
 	CurvaCubica.call(this, this.base, this.baseDer, this.ptos);
+
+	this.cantidadDeCurvas = ((this.ptos.length-4)/3)+1;
+	
+	this.curvas = [];
+	
+	//me armo los grafos de control para cada curva
+	var curva = new Array();
+	for(var i = 0; i < this.ptos.length; i++){
+		if((i-4)%3 == 0 &&  (i-4) >= 0){
+			this.curvas.push(curva);
+			curva = new Array(this.ptos[i-1]);
+		}
+		curva.push(this.ptos[i]);
+	}
+	this.curvas.push(curva);
+
 }

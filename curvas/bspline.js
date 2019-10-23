@@ -25,4 +25,23 @@ function BSpline(puntosDeControl) {
 	this.baseDer = [this.base0der, this.base1der, this.base2der, this.base3der];
 	
 	CurvaCubica.call(this, this.base, this.baseDer, this.ptos);
+
+	//no hay suficientes puntos para armar una curva B-Spline cubica
+
+	if(this.ptos.length < 4){
+		return null;		
+	}
+	this.cantidadDeCurvas = (this.ptos.length-4)+1;
+	
+	this.curvas = [];
+
+	var curva = new Array(this.ptos[0], this.ptos[1], this.ptos[2], this.ptos[3]);
+	this.curvas[0] = curva;
+	for(var i = 4; i < this.ptos.length; i++){
+		curva = new Array();//capaz no hace falta
+		curva = this.curvas[i-4].slice(1, 4);
+		curva.push(this.ptos[i]);
+		this.curvas.push(curva);
+	}
+
 }

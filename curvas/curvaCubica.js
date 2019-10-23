@@ -5,7 +5,7 @@ function CurvaCubica(base, baseDer, puntosDeControl) {
 	this.baseDer = baseDer;
 
 	this.ptos = puntosDeControl;
-	
+	/*
 	//no hay suficientes puntos para armar una curva de Bezier
 	var tmp = (this.ptos.length-4)%3;
 
@@ -26,18 +26,6 @@ function CurvaCubica(base, baseDer, puntosDeControl) {
 		curva.push(this.ptos[i]);
 	}
 	this.curvas.push(curva);
-	/*
-	//bases
-	this.b00 = base[0];
-	this.b01 = base[1];
-	this.b02 = base[2];
-	this.b03 = base[3];
-
-	//bases derivadas
-	this.b10 = baseDer[0];
-	this.b11 = baseDer[1];
-	this.b12 = baseDer[2];
-	this.b13 = baseDer[3];
 	*/
 	this.getValor = function(t, base){
 		var i = Math.trunc(t);
@@ -62,7 +50,8 @@ function CurvaCubica(base, baseDer, puntosDeControl) {
 
 		return resultado;
 	};
-
+	//CHEQUEAR!
+	//this.cantidadDeCurvas = (this.ptos.length-4)+1;
 
 	Curva.call(this, 0, this.cantidadDeCurvas);
 
