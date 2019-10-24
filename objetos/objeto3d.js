@@ -13,7 +13,7 @@ function Objeto3D(conTapa, conEjes = false) {
   this.conEjes = conEjes;
 
   this.matrizModelado = mat4.create();
-  mat4.identity(this.matrizModelado);
+  this.matrizRotacion = mat4.create();
   this.matrizPadre;
 
   this.hijos = [];
@@ -77,9 +77,14 @@ function Objeto3D(conTapa, conEjes = false) {
     }
   }
 
+  this.animar = function() {};
+
   this.dibujar = function(matrizPadre, conEjes) {
     var matrizModeladoFinal = mat4.create();
-    mat4.multiply(matrizModeladoFinal, matrizPadre, this.matrizModelado);
+    // aplicar rotacion generada por setRotacion;
+    mat4.multiply(matrizModeladoFinal, this.matrizModelado, this.matrizRotacion);
+    // multiplacar por matriz del padre
+    mat4.multiply(matrizModeladoFinal, matrizPadre, matrizModeladoFinal);
 
     if (this.vertexBuffer && this.indexBuffer && this.normalBuffer) {
       // dibujar la geometria del objeto, segun la tranformacion de "matrizModeladoFinal"
@@ -121,6 +126,14 @@ function Objeto3D(conTapa, conEjes = false) {
 
   this.setPosicion = function(x, y, z) {
     // guarda la posicion
+  }
+
+  // a diferencia del rotar que te rota un angulo que se va sumando cada vez
+  // que se llama, este no mantiene llamados anteriores, solo este
+  // Esta rotacion se hace primero que todas las demas
+  this.setRotacion = function(anguloRotacion, ejeRotacion) {
+    mat4.identity(this.matrizRotacion);
+    mat4.rotate(this.matrizRotacion, this.matrizRotacion, anguloRotacion, ejeRotacion);
   }
 
   this.agregarHijo = function(obj) {
