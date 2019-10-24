@@ -22,17 +22,13 @@ var viewMatrix = mat4.create();
 var projMatrix = mat4.create();
 var normalMatrix = mat4.create();
 var rotate_angle = 0;
-var girable_angle = 0;
 
 var animados = [];
+var iniciarObjectos3D = function() {};
+
 var test = false;
 var rotate = false;
 var conEjes = false;
-var girar = false;
-var girable;
-var rotable;
-var angulo_rotable;
-MAXIMO_ANGULO_ROTABLE = 0.1;
 
 function loadShader(url, callback) {
 
@@ -220,24 +216,13 @@ function animate() {
     mat4.identity(rotationMatrix);
     mat4.rotate(rotationMatrix, rotationMatrix, rotate_angle, [1.0, 0.0, 1.0]);
   }
-  var velocidad_angular = 0.1;
-  if (girar) {
-    var delta_angulo_rotable = Math.random() / 200 - 0.0025;
-    // mantener el rotable con un angulo entre -0.1 y 0.1
-    if (angulo_rotable > MAXIMO_ANGULO_ROTABLE && delta_angulo_rotable > 0 ||
-      angulo_rotable < -MAXIMO_ANGULO_ROTABLE && delta_angulo_rotable < 0) {
-      delta_angulo_rotable = -delta_angulo_rotable;
-    }
-    angulo_rotable += delta_angulo_rotable;
-    girable.rotar(velocidad_angular, vec3.fromValues(0.0, -1.0, 0.0))
-    rotable.rotar(delta_angulo_rotable, vec3.fromValues(0.0, 0.0, 1.0))
-  }
 }
 
 function tick() {
 
   requestAnimationFrame(tick);
   _.each(animados, function(animado) {
+    animado.animar();
     animado.dibujar(mat4.create(), conEjes);
   })
   animate();
@@ -248,7 +233,6 @@ window.onload = loadVertexShader;
 E = 69;
 T = 84;
 R = 82;
-G = 71;
 $('body').on("keydown", function(event) {
   if (event.keyCode == T) {
     test = !test;
@@ -260,9 +244,5 @@ $('body').on("keydown", function(event) {
 
   if (event.keyCode == E) {
     conEjes = !conEjes;
-  }
-
-  if (event.keyCode == G) {
-    girar = !girar;
   }
 });
