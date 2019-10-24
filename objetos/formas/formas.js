@@ -65,3 +65,42 @@ function Cuadrado(lado) {
 
   this.crearCuadrado();
 }
+function CirculoB() {
+  Forma.call(this);
+
+  var t = 8.0;
+  var h = 2.0;
+/*
+  var p0 = vec3.fromValues(t, 0.0, 0.0);
+  var p1 = vec3.fromValues(-t, 0.0, 0.0);
+  var p2 = vec3.fromValues(0.0, 0.0, t);
+  var p3 = vec3.fromValues(t, 0.0, 0.0);
+  var p4 = vec3.fromValues(-t, 0.0, 0.0);
+*/
+  
+  var p0 = vec3.fromValues(0.0, -t, h/3);
+  var p1 = vec3.fromValues(0.0, t, -h/2);
+  var p2 = vec3.fromValues(-t, 0.0, 1.5*h);
+
+  var p3 = vec3.fromValues(0.0, -t, h/3);
+  var p4 = vec3.fromValues(0.0, t, -h/2);
+  var p5 = vec3.fromValues(-t, 0.0, h/2);
+  var p6 = vec3.fromValues(0.0, -t, h/3);
+  var p7 = vec3.fromValues(0.0, t, -h/2);
+  
+  this.pts = [p0, p1, p2, p0, p1, p2]//, p1, p2];
+
+
+  BSpline.call(this, this.pts);
+
+  this.limite = this.cantidadDeCurvas;
+  this.centro = vec3.fromValues(0.0, 0.5, 0.0);
+  
+  this.crearCirculo = function(discretizacion) {
+    for(var i = 0; i <= this.limite; i+= discretizacion){
+      this.puntos.push(this.parametrizacion(i));
+      this.normales.push(this.parametrizacion(i));
+    }
+  }
+  this.crearCirculo(0.01);
+}

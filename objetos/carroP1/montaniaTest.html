@@ -1,0 +1,71 @@
+<!doctype html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html>
+
+<head>
+	<title>66.71 WebGL FrameWork</title>
+	<style>
+		body {
+			background-color: grey;
+		}
+
+		canvas {
+			background-color: white;
+		}
+
+		textarea {
+			background-color: black;
+			foreground-color: white;
+		}
+	</style>
+</head>
+
+<body>
+	<script type="text/javascript" src="../../lib/gl-matrix-min.js"></script>
+	<script type="text/javascript" src="../../lib/underscore-min.js"></script>
+	<script type="text/javascript" src="../../lib/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="../../animador.js"></script>
+	<script type="text/javascript" src="../index_array.js"></script>
+	<script type="text/javascript" src="../objeto3d.js"></script>
+	<script type="text/javascript" src="../cubo/cubo.js"></script>
+	<script type="text/javascript" src="../cilindro/cilindro.js"></script>
+	<script type="text/javascript" src="../silla/silla.js"></script>
+	<script type="text/javascript" src="../barrido_y_revolucion.js"></script>
+	<script type="text/javascript" src="../../curvas/curva.js"></script>
+	<script type="text/javascript" src="../../curvas/rectas.js"></script>
+	<script type="text/javascript" src="../../curvas/curvaCubica.js"></script>
+	<script type="text/javascript" src="../../curvas/bezier.js"></script>
+	<script type="text/javascript" src="../../curvas/bspline.js"></script>
+	<script type="text/javascript" src="../formas/formas.js"></script>
+	<script type="text/javascript" src="../figuraCarro/figuraMontania.js"></script>
+
+	<script type="text/javascript" src="../figuraCarro/figuraCuerpoCarro.js"></script>
+	<script type="text/javascript" src="../figuraCarro/figuraExtremoCarro.js"></script>
+	<script type="text/javascript" src="../figuraCarro/figuraSillaCarro.js"></script>
+
+	<script type="text/javascript" src="../carroP1/extremoCarro.js"></script>
+	<script type="text/javascript" src="../carroP1/sillaCarro.js"></script>
+	<script type="text/javascript" src="../carroP1/cuerpoCarro.js"></script>
+	<script type="text/javascript" src="../carroP1/cuerpoCarro.js"></script>
+
+	<script type="text/javascript" src="montania.js"></script>
+	
+	<script>
+		function iniciarObjectos3D() {
+			var i = new Montania();
+			i.rotar(-Math.PI/2, vec3.fromValues(1.0,0.0,0.0));
+			i.rotar(-Math.PI/2, vec3.fromValues(0.0,1.0,0.0));
+			animados.push(i);
+		}
+	</script>
+
+	<center>
+		<h1>Sistemas Gráficos - 66.71</h1>
+		<h2>WebGL - Sillas</h2>
+		<canvas id="my-canvas" width="900" height="500">
+			Your browser does not support the HTML5 canvas element.
+		</canvas>
+	</center>
+</body>
+
+</html>
