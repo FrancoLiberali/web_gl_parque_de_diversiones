@@ -70,26 +70,33 @@ function CirculoB() {
 
   var t = 8.0;
   var h = 2.0;
-/*
-  var p0 = vec3.fromValues(t, 0.0, 0.0);
-  var p1 = vec3.fromValues(-t, 0.0, 0.0);
-  var p2 = vec3.fromValues(0.0, 0.0, t);
-  var p3 = vec3.fromValues(t, 0.0, 0.0);
-  var p4 = vec3.fromValues(-t, 0.0, 0.0);
-*/
-  
-  var p0 = vec3.fromValues(0.0, -t, h/3);
-  var p1 = vec3.fromValues(0.0, t, -h/2);
-  var p2 = vec3.fromValues(-t, 0.0, 1.5*h);
 
-  var p3 = vec3.fromValues(0.0, -t, h/3);
-  var p4 = vec3.fromValues(0.0, t, -h/2);
-  var p5 = vec3.fromValues(-t, 0.0, h/2);
-  var p6 = vec3.fromValues(0.0, -t, h/3);
-  var p7 = vec3.fromValues(0.0, t, -h/2);
+  var p0 = vec3.fromValues(-t, 0.0, 0.0);
+  var pt = vec3.fromValues(-t+0.5, 0.0, 0.0);
+  var p1 = vec3.fromValues(-t/2, -3*t/2, (5/2)*h);
+  var p2 = vec3.fromValues(0.0, 0.0, h*3);
+  var p3 = vec3.fromValues(t/2, 3*t/2, (5/2)*h);
+  var p4 = vec3.fromValues(t, 0.0, 0.0);
   
-  this.pts = [p0, p1, p2, p0, p1, p2]//, p1, p2];
+  var p5 = vec3.fromValues(t/2, -t/2, h/2);
+  var p6 = vec3.fromValues(0.0, 0.0, 0.0);
+  var p7 = vec3.fromValues(-t/2, t/2, 0.0);
+  var p8 = vec3.fromValues(-t, 0.0, 0.0);
 
+  var p00 = vec3.fromValues(0.0, -t, h/3);
+  var p01 = vec3.fromValues(0.0, t, -h/2);
+  var p02 = vec3.fromValues(-t, 0.0, 1.5*h);
+
+  var p03 = vec3.fromValues(0.0, -t, h/3);
+  var p04 = vec3.fromValues(0.0, t, -h/2);
+  var p05 = vec3.fromValues(-t, 0.0, h/2);
+  var p06 = vec3.fromValues(0.0, -t, h/3);
+  var p07 = vec3.fromValues(0.0, t, -h/2);
+  
+  var pista0 = [p00, p01, p02, p00, p01, p02, p00];
+  var pista1 = [p8,pt,pt, p1, p2, p3, p4, p5, p6, p7, p8,p8,pt,pt];
+  this.pistas = [pista0, pista1];
+  this.pts = this.pistas[app.pista];
 
   BSpline.call(this, this.pts);
 
@@ -102,5 +109,5 @@ function CirculoB() {
       this.normales.push(this.parametrizacion(i));
     }
   }
-  this.crearCirculo(0.01);
+  this.crearCirculo(0.2);
 }

@@ -10,6 +10,8 @@ var app = {
   detenerAnimacionSillas: function() {
     sillas.detenerAnimacion();
   },
+  cantidadDePilares: 8,
+  pista: 0,
 };
 
 function GUI() {
@@ -33,6 +35,13 @@ function GUI() {
   f2.add(app, 'velocidadSillas', 5, 10).name("Velocidad").step(0.5);
 
   f2.open();
+
+  var f3 = gui.addFolder('Parametros montaña rusa');
+
+  f3.add(app, 'cantidadDePilares', 8.0, 20.0).name("Pilares").step(1);
+  f3.add(app, 'pista', 0, 1).name("Pista").step(1);
+
+  f3.open();
 };
 
 GUI();
