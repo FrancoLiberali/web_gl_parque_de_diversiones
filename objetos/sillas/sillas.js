@@ -1,7 +1,3 @@
-iniciarObjectos3D = function() {
-  sillas = new Sillas(app.alturaSillas, app.cantidadSillas);
-  animados = [sillas];
-}
 
 function Sillas(h, cant_sillas) {
   // es un contenedor

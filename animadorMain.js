@@ -35,12 +35,43 @@ var foco0 = vec3.fromValues(100.0, 0.0, 0.0);
 var camara1 = vec3.fromValues(0.0, 0.0, 0.0);
 var foco1 = vec3.fromValues(10.0, 50.0, 0.0);
 
-var camara2 = vec3.fromValues(1.0, 0.0, 0.0);
-var foco2 = vec3.fromValues(0.0, 0.0, 0.0);
+var camara2 = vec3.fromValues(0.0, 0.0, 0.0);
+var foco2 = vec3.fromValues(-5.0, -15.0, 0.0);
 
-var camara3 = vec3.fromValues(1.0, 0.0, 0.0);
+var camara3 = vec3.fromValues(100.0, 0.0, 0.0);
 var foco3 = vec3.fromValues(0.0, 0.0, 0.0);
-//var foco = vec3.fromValues(100.0,0.0,0.0);
+
+// matriz de giro sobre el eje x (foco) 
+var giroX = mat4.create();
+// matriz de giro sobre el eje y (foco)
+var giroY = mat4.create();
+// direccion que va desde la camara al foco
+var eje = vec3.create();
+eje = vec3.sub(eje, foco, camara);
+// eje x relativo al eje
+var ejeX = vec3.create();
+// eje y relativo al eje
+var ejeY = vec3.create();
+// vector donde se guarda la direccion a la cual moverse (izq/der) relativa al eje
+var lado = vec3.create();
+
+//funcion de giro
+var girar = girarFoco;
+var codigoCamara = 0;
+var primeraPersona = true;
+var velocidadRotacion = 0.01;
+var velocidad = 0.5;
+//radio de para las vistas orbitales
+var radio = 15;
+// "diferencial" del angulos de giro sobre el eje x
+var alfa = 0;
+// "diferencial" del angulos de giro sobre el eje y
+var beta = 0;
+
+
+
+
+NORMAL_HACIA_ARRIBA = vec3.fromValues(0, 0, 1);
 
 var animados = [];
 var iniciarObjectos3D = function() {};
@@ -65,13 +96,13 @@ var vs_color_source = "";
 var fs_color_source = "";
 
 function loadVertexShader() {
-  loadShader("../../glsl/vertex_normal.glsl", function(code) {
+  loadShader("./glsl/vertex_normal.glsl", function(code) {
     vs_normal_source = code;
-    loadShader("../../glsl/fragment_normal.glsl", function(code) {
+    loadShader("./glsl/fragment_normal.glsl", function(code) {
       fs_normal_source = code;
-      loadShader("../../glsl/vertex_color.glsl", function(code) {
+      loadShader("./glsl/vertex_color.glsl", function(code) {
         vs_color_source = code;
-        loadShader("../../glsl/fragment_color.glsl", function(code) {
+        loadShader("./glsl/fragment_color.glsl", function(code) {
           fs_color_source = code;
           initWebGL();
         })
@@ -251,24 +282,25 @@ function tick() {
 
 window.onload = loadVertexShader;
 
-var girar = girarFoco;
-
-
 E = 69;
+Q = 81;
 T = 84;
 R = 82;
 W = 87;
 S = 83;
 A = 65;
 D = 68;
+L = 76;
+
 ESPACIO = 32;
-var codigoCamara = 0;
+
 
 function cambiarCamara(codigo){
   // camara primera persona
   if (codigo == 0){
-    camara1 = camara;
-    foco1 = foco;
+    primeraPersona = true;
+    camara2 = camara;
+    foco2 = foco;
 
     camara = camara0;
     foco = foco0;
@@ -276,6 +308,8 @@ function cambiarCamara(codigo){
   }
   // camara orbital centrada en montaña rusa
   if (codigo == 1){
+    radio = 15;
+    primeraPersona = false;
     camara0 = camara;
     foco0 = foco;
 
@@ -284,10 +318,21 @@ function cambiarCamara(codigo){
     girar = girarCamara;
   }
   if (codigo == 2){
-    
+    // camara orbital centrada en la silla
+    camara1 = camara;
+    foco1 = foco;
+
+    camara = camara2;
+    foco = foco2;
   }
+  // camara orbital centrada en el origen
   if (codigo == 3){
-    
+    radio = 70;
+    camara2 = camara;
+    foco2 = foco;
+
+    camara = camara3;
+    foco = foco3;
   }
   if (codigo == 4){
     
@@ -298,7 +343,7 @@ $('body').on("keydown", function(event) {
 
   if (event.keyCode == ESPACIO) {
     codigoCamara = codigoCamara + 1;
-    if (codigoCamara > 1) codigoCamara = 0;
+    if (codigoCamara > 3) codigoCamara = 0;
     cambiarCamara(codigoCamara);
   }
 
@@ -310,40 +355,44 @@ $('body').on("keydown", function(event) {
     rotate = !rotate;
   }
 
-  if (event.keyCode == E) {
+  if (event.keyCode == L) {
     conEjes = !conEjes;
   }
-  if (event.keyCode == W) {
+  if (event.keyCode == W && primeraPersona) {
     vec3.normalize(eje, eje);
     vec3.scale(eje, eje, velocidad)
     vec3.add(camara, camara, eje); 
   }
-  if (event.keyCode == S) {
+  if (event.keyCode == S && primeraPersona) {
     vec3.normalize(eje, eje);
     vec3.scale(eje, eje, velocidad)
     vec3.sub(camara, camara, eje); 
   }
-  if (event.keyCode == A) {
+  if (event.keyCode == A && primeraPersona) {
     vec3.cross(lado, NORMAL_HACIA_ARRIBA, eje);
     vec3.normalize(lado, lado);
     vec3.scale(lado, lado, velocidad)
     vec3.add(camara, camara, lado); 
   }
-  if (event.keyCode == D) {
+  if (event.keyCode == D && primeraPersona) {
     vec3.cross(lado, eje, NORMAL_HACIA_ARRIBA);
     vec3.normalize(lado, lado);
     vec3.scale(lado, lado, velocidad)
     vec3.add(camara, camara, lado); 
   }
-  radio = vec3.distance(vec3.fromValues(0.0, 0.0, 0.0), camara);
+  if (event.keyCode == Q) {
+    vec3.add(camara, camara, vec3.fromValues(0.0, 0.0, velocidad));
+  }
+  if (event.keyCode == E) {
+    vec3.sub(camara, camara, vec3.fromValues(0.0, 0.0, velocidad));
+  }
+ 
 });
 
 var isMouseDown = false;
-
 var mouse = {x: 0, y: 0};
 var mouseO = {x: 0, y: 0};
-var velocidadRotacion = 0.01;
-var velocidad = 0.5;
+
 
 $('body').mousemove(function(e){ 
   mouse.x = e.clientX || e.pageX; 
@@ -357,16 +406,6 @@ $('body').mousedown(function(event){
 $('body').mouseup(function(event){
   isMouseDown = false;    
 });
-
-var giroX = mat4.create();
-var giroY = mat4.create();
-var eje = vec3.create();
-eje = vec3.sub(eje, foco, camara);
-var ejeX = vec3.create();
-var ejeY = vec3.create();
-var lado = vec3.create();
-
-NORMAL_HACIA_ARRIBA = vec3.fromValues(0, 0, 1);
 
 function girarFoco(){
   var anguloX = Math.atan((mouse.x - mouseO.x)*velocidadRotacion);
@@ -384,14 +423,9 @@ function girarFoco(){
   foco = vec3.transformMat4(foco, foco, giroX);
   foco = vec3.transformMat4(foco, foco, giroY);
 };
-var radio = 50;
-var alfa = 0;
-var beta = 0;
+
 function girarCamara(){
-  //var anguloX = Math.atan((mouse.x - mouseO.x)*velocidadRotacion);
-  //var anguloY = Math.atan((mouse.y - mouseO.y)*velocidadRotacion);
-   
-  
+
   alfa = alfa + (mouse.x - mouseO.x) * velocidadRotacion;
   beta = beta + (mouse.y - mouseO.y) * velocidadRotacion;
   
@@ -401,19 +435,8 @@ function girarCamara(){
   if (beta<0) beta=0;
   if (beta>Math.PI) beta=Math.PI;
 
-  camara = vec3.fromValues(radio * Math.cos(alfa) * Math.sin(beta), radio * Math.sin(alfa) * Math.sin(beta), radio * Math.cos(beta)) ;
-  eje = vec3.sub(eje, foco, camara);
-
-  /*
-  eje = vec3.sub(eje, foco, camara);
-  vec3.cross(ejeY, eje, NORMAL_HACIA_ARRIBA);
-  vec3.normalize(ejeY, ejeY);
-  vec3.cross(ejeX, ejeY, eje);
-  vec3.normalize(ejeX, ejeX);
-  //eje = vec3.nomrmalize(eje, eje);
-  giroX = mat4.fromRotation(giroX, anguloX, ejeX);
-  giroY = mat4.fromRotation(giroY, anguloY, vec3.fromValues(0.0, 1.0, 0.0));
-  foco = vec3.transformMat4(foco, foco, giroX);
-  foco = vec3.transformMat4(foco, foco, giroY);
-  */
+  camara = vec3.fromValues(radio * Math.cos(alfa) * Math.sin(beta), radio * Math.sin(alfa) * Math.sin(beta), radio * Math.cos(beta));
+  
+  //traslado al centro de rotacion
+  vec3.add(camara, camara, foco);
 };

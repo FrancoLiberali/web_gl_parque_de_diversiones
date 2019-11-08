@@ -4,8 +4,8 @@ function CuerpoCarro() {
   this.crearCuerpoCarro = function() {
 
     var figura = new FiguraCuerpoCarro();
-    var recta = new RectaEnY(0, 2.5);
-    var discretizacion = 0.1;
+    var recta = new RectaEnY(-1.25, 1.25);
+    var discretizacion = 0.5;
 
     barrido(
       this.vertex_array,
@@ -18,12 +18,13 @@ function CuerpoCarro() {
     );
   }
   this.crearCarro = function() {
+    this.transladar(-0.75, 0.0, 0.0, 0);
     var extremoIzq = new ExtremoCarro();
-    extremoIzq.transladar(0.0, -0.5, 0.0, 0);
+    extremoIzq.transladar(0.0, -1.25, 0.0, 0);
     this.agregarHijo(extremoIzq);
 
     var extremoDer = new ExtremoCarro();
-    extremoDer.transladar(0.0, 2.3, 0.0, 0);
+    extremoDer.transladar(0.0, 1.25, 0.0, 0);
     this.agregarHijo(extremoDer);
 
     var silla1 = new SillaCarro();
@@ -32,14 +33,16 @@ function CuerpoCarro() {
     this.agregarHijo(silla1);
 
     var silla2 = new SillaCarro();
-    silla2.transladar(1.0, 0.0, 0.0, 0);
+    
     silla2.rotar(Math.PI / 2, vec3.fromValues(0.0, 0.0, 1.0));
+    silla2.transladar(0.0, -1.0, 0.0, 0);
     this.agregarHijo(silla2);
 
   }
   
 
   this.t = 0;
+  
   this.recta = new CirculoB();
   this.dibujar = function(matrizPadre, conEjes) {
 
@@ -85,7 +88,6 @@ function CuerpoCarro() {
     this.t+=0.0025;
     if (this.t > this.recta.limiteSuperior) this.t = 0; 
   }
-
 
   this.crearCuerpoCarro();
   this.setupWebGLBuffers();

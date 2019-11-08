@@ -6,7 +6,7 @@ function ExtremoCarro() {
     //var circulo = new FiguraCarro();
     var figura = new FiguraExtremoCarro();
     var recta = new RectaEnY(0, 0.5);
-    var discretizacion = 0.1;
+    var discretizacion = 0.3;
 
     barrido(
       this.vertex_array,

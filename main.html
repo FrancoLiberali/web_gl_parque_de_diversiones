@@ -1,0 +1,85 @@
+<!doctype html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html>
+
+<head>
+	<title>66.71 WebGL FrameWork</title>
+	<style>
+		body {
+			background-color: grey;
+		}
+
+		canvas {
+			background-color: white;
+		}
+
+		textarea {
+			background-color: black;
+			foreground-color: white;
+		}
+	</style>
+</head>
+
+<body>
+	<script type="text/javascript" src="./lib/gl-matrix-min.js"></script>
+	<script type="text/javascript" src="./lib/underscore-min.js"></script>
+	<script type="text/javascript" src="./lib/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="./lib/dat.gui.min.js"></script>
+	<script type="text/javascript" src="./animadorMain.js"></script>
+	<script type="text/javascript" src="./objetos/index_array.js"></script>
+	<script type="text/javascript" src="./objetos/objeto3d.js"></script>
+	<script type="text/javascript" src="./objetos/cubo/cubo.js"></script>
+	<script type="text/javascript" src="./objetos/cilindro/cilindro.js"></script>
+	<script type="text/javascript" src="./objetos/silla/silla.js"></script>
+	<script type="text/javascript" src="./objetos/barrido_y_revolucion.js"></script>
+	<script type="text/javascript" src="./curvas/curva.js"></script>
+	<script type="text/javascript" src="./curvas/rectas.js"></script>
+	<script type="text/javascript" src="./curvas/curvaCubica.js"></script>
+	<script type="text/javascript" src="./curvas/bezier.js"></script>
+	<script type="text/javascript" src="./curvas/bspline.js"></script>
+	<script type="text/javascript" src="./objetos/formas/formas.js"></script>
+	<script type="text/javascript" src="./objetos/figuraCarro/figuraMontania.js"></script>
+
+	<script type="text/javascript" src="./menu_animador.js"></script>
+	
+	<script type="text/javascript" src="./objetos/cono/cono.js"></script>
+	<script type="text/javascript" src="./objetos/sillas/sillas.js"></script>
+
+	<script type="text/javascript" src="./objetos/figuraCarro/figuraCuerpoCarro.js"></script>
+	<script type="text/javascript" src="./objetos/figuraCarro/figuraExtremoCarro.js"></script>
+	<script type="text/javascript" src="./objetos/figuraCarro/figuraSillaCarro.js"></script>
+
+	<script type="text/javascript" src="./objetos/carroP1/extremoCarro.js"></script>
+	<script type="text/javascript" src="./objetos/carroP1/sillaCarro.js"></script>
+	<script type="text/javascript" src="./objetos/carroP1/cuerpoCarro.js"></script>
+	<script type="text/javascript" src="./objetos/carroP1/cuerpoCarro.js"></script>
+
+	<script type="text/javascript" src="./objetos/esfera/esfera.js"></script>
+	<script type="text/javascript" src="./objetos/farol/farol.js"></script>
+
+	<script type="text/javascript" src="./objetos/carroP1/montania.js"></script>
+	
+	<script>
+		function iniciarObjectos3D() {
+			var montaniaRusa = new Montania();
+			sillas = new Sillas(app.alturaSillas, app.cantidadSillas);
+			farol = new Farol();
+			//farol.escalar(0.5,0.51,0.25);
+			sillas.rotar(Math.PI/2, vec3.fromValues(1.0,0.0,0.0));
+			sillas.transladar(-5.0, -15.0, 0.0);
+			montaniaRusa.transladar(10.0, 50.0, 0.0);
+			
+			animados = [montaniaRusa, sillas, farol];
+		}
+	</script>
+
+	<center>
+		<h1>Sistemas Gráficos - 66.71</h1>
+		<h2>WebGL - Tp1</h2>
+		<canvas id="my-canvas" width="900" height="500">
+			Your browser does not support the HTML5 canvas element.
+		</canvas>
+	</center>
+</body>
+
+</html>
