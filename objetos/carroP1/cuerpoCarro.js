@@ -28,7 +28,6 @@ function CuerpoCarro() {
     this.agregarHijo(extremoDer);
 
     var silla1 = new SillaCarro();
-    //silla1.transladar(0.0, 2.3, 0.0, 0);
     silla1.rotar(Math.PI / 2, vec3.fromValues(0.0, 0.0, 1.0));
     this.agregarHijo(silla1);
 
@@ -39,11 +38,11 @@ function CuerpoCarro() {
     this.agregarHijo(silla2);
 
   }
-  
 
   this.t = 0;
   
   this.recta = new CirculoB();
+  
   this.dibujar = function(matrizPadre, conEjes) {
 
     var binormal = vec3.create();
@@ -69,8 +68,8 @@ function CuerpoCarro() {
     if (this.vertexBuffer && this.indexBuffer && this.normalBuffer) {
       // dibujar la geometria del objeto, segun la tranformacion de "matrizModeladoFinal"
       drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColores);
-
     }
+    
 
     if (this.hijos.length > 0) {
 
@@ -85,9 +84,16 @@ function CuerpoCarro() {
       }
     }
 
-    this.t+=0.0025;
+    this.t+=0.018;
     if (this.t > this.recta.limiteSuperior) this.t = 0; 
-  }
+  };
+
+  this.getPosicion = function(){
+    
+    this.posicion = this.recta.evaluarEn(this.t);
+    
+    return this.posicion;
+  };
 
   this.crearCuerpoCarro();
   this.setupWebGLBuffers();

@@ -342,19 +342,19 @@ var isMouseDown = false;
 
 var mouse = {x: 0, y: 0};
 var mouseO = {x: 0, y: 0};
-var velocidadRotacion = 0.01;
+var velocidadRotacion = 0.001;
 var velocidad = 0.5;
 
-$('body').mousemove(function(e){ 
+$('my-canvas').mousemove(function(e){ 
   mouse.x = e.clientX || e.pageX; 
-  mouse.y = e.clientY || e.pageY 
+  mouse.y = e.clientY || e.pageY;
 });
   
-$('body').mousedown(function(event){   
-  isMouseDown = true;        
+$('my-canvas').mousedown(function(event){   
+  isMouseDown = true;  
 });
 
-$('body').mouseup(function(event){
+$('my-canvas').mouseup(function(event){
   isMouseDown = false;    
 });
 

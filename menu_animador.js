@@ -39,7 +39,7 @@ function GUI() {
   var f3 = gui.addFolder('Parametros montaña rusa');
 
   f3.add(app, 'cantidadDePilares', 8.0, 20.0).name("Pilares").step(1);
-  f3.add(app, 'pista', 0, 1).name("Pista").step(1);
+  f3.add(app, 'pista', 0, 2).name("Pista").step(1);
 
   f3.open();
 };

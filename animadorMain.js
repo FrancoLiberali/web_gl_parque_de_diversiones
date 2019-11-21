@@ -26,14 +26,14 @@ var rotate_angle = 0;
 //camaras
 var vista = mat4.create();
 mat4.identity(vista);
-var camara = vec3.fromValues(0.0, 0.0, 0.0);
+var camara = vec3.fromValues(-1.5, 0.0, 0.50);
 var foco = vec3.fromValues(100.0, 0.0, 0.0);
 
 var camara0 = vec3.fromValues(0.0, 0.0, 0.0);
 var foco0 = vec3.fromValues(100.0, 0.0, 0.0);
 
 var camara1 = vec3.fromValues(0.0, 0.0, 0.0);
-var foco1 = vec3.fromValues(10.0, 50.0, 0.0);
+var foco1 = vec3.fromValues(10.0, 20.0, 0.0);
 
 var camara2 = vec3.fromValues(0.0, 0.0, 0.0);
 var foco2 = vec3.fromValues(-5.0, -15.0, 0.0);
@@ -272,10 +272,18 @@ function tick() {
 
   requestAnimationFrame(tick);
   if(isMouseDown) girar();
-  mat4.lookAt(vista, camara, foco, vec3.fromValues(0.0, 0.0, 1.0));
+  if(codigoCamara === 4){
+    var tmp = camara;
+    camara = animados[0].getPosicion();
+    vec3.add(camara, camara, vec3.fromValues(0.0, 0.0, 0.8));
+    var dir = vec3.create();
+    dir = vec3.sub(dir, camara, tmp);
+    vec3.add(foco, dir, camara);
+  }
+  viewMatrix = mat4.lookAt(viewMatrix, camara, foco, vec3.fromValues(0.0, 0.0, 1.0));
   _.each(animados, function(animado) {
     animado.animar();
-    animado.dibujar(vista, conEjes);
+    animado.dibujar(mat4.create(), conEjes);
   })
   animate();
 }
@@ -308,7 +316,7 @@ function cambiarCamara(codigo){
   }
   // camara orbital centrada en montaña rusa
   if (codigo == 1){
-    radio = 15;
+    radio = 30;
     primeraPersona = false;
     camara0 = camara;
     foco0 = foco;
@@ -319,6 +327,7 @@ function cambiarCamara(codigo){
   }
   if (codigo == 2){
     // camara orbital centrada en la silla
+    radio = 13;
     camara1 = camara;
     foco1 = foco;
 
@@ -327,7 +336,7 @@ function cambiarCamara(codigo){
   }
   // camara orbital centrada en el origen
   if (codigo == 3){
-    radio = 70;
+    radio = 60;
     camara2 = camara;
     foco2 = foco;
 
@@ -335,7 +344,11 @@ function cambiarCamara(codigo){
     foco = foco3;
   }
   if (codigo == 4){
-    
+    camara3 = camara;
+    foco3 = foco;
+
+    camara = animados[0].getPosicion();
+    foco = vec3.fromValues(0.0, 0.0, 1.0);
   }
 };
 
@@ -343,7 +356,7 @@ $('body').on("keydown", function(event) {
 
   if (event.keyCode == ESPACIO) {
     codigoCamara = codigoCamara + 1;
-    if (codigoCamara > 3) codigoCamara = 0;
+    if (codigoCamara > 4) codigoCamara = 0;
     cambiarCamara(codigoCamara);
   }
 
@@ -393,14 +406,15 @@ var isMouseDown = false;
 var mouse = {x: 0, y: 0};
 var mouseO = {x: 0, y: 0};
 
-
-$('body').mousemove(function(e){ 
+$('#my-canvas').mousemove(function(e){ 
   mouse.x = e.clientX || e.pageX; 
   mouse.y = e.clientY || e.pageY 
 });
   
-$('body').mousedown(function(event){   
-  isMouseDown = true;        
+$('#my-canvas').mousedown(function(event){   
+  isMouseDown = true;
+  mouseO.x = mouse.x;
+  mouseO.y = mouse.y;    
 });
 
 $('body').mouseup(function(event){
@@ -435,8 +449,18 @@ function girarCamara(){
   if (beta<0) beta=0;
   if (beta>Math.PI) beta=Math.PI;
 
-  camara = vec3.fromValues(radio * Math.cos(alfa) * Math.sin(beta), radio * Math.sin(alfa) * Math.sin(beta), radio * Math.cos(beta));
+  var tmp = vec3.fromValues(radio * Math.cos(alfa) * Math.sin(beta), radio * Math.sin(alfa) * Math.sin(beta), radio * Math.cos(beta));
   
   //traslado al centro de rotacion
-  vec3.add(camara, camara, foco);
+  vec3.add(tmp, tmp, foco);
+
+  //evita que el la camara y el foco esten uno arriba del otro
+  if(tmp[0] === foco[0] && tmp[1] === foco[1])
+    return;
+
+  //evita que el la camara este por debajo del piso
+  if(tmp[2] < 0)
+    tmp[2] = 0;
+
+  camara = tmp;
 };

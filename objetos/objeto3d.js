@@ -78,6 +78,9 @@ function Objeto3D(conTapa, conEjes = false) {
   }
 
   this.animar = function() {};
+  this.getPosicion = function(){
+    return null;
+  };
 
   this.dibujar = function(matrizPadre, conEjes) {
     var matrizModeladoFinal = mat4.create();

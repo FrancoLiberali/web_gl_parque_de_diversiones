@@ -21,6 +21,14 @@
 </head>
 
 <body>
+	<center>
+		<h1>Sistemas Gráficos - 66.71</h1>
+		<h2>WebGL - Tp1</h2>
+		<canvas id="my-canvas" width="900" height="500">
+			Your browser does not support the HTML5 canvas element.
+		</canvas>
+	</center>
+
 	<script type="text/javascript" src="./lib/gl-matrix-min.js"></script>
 	<script type="text/javascript" src="./lib/underscore-min.js"></script>
 	<script type="text/javascript" src="./lib/jquery-1.11.2.min.js"></script>
@@ -57,29 +65,27 @@
 	<script type="text/javascript" src="./objetos/esfera/esfera.js"></script>
 	<script type="text/javascript" src="./objetos/farol/farol.js"></script>
 
+	<script type="text/javascript" src="./objetos/piso/piso.js"></script>
+	<script type="text/javascript" src="./objetos/skybox/skybox.js"></script>
+
 	<script type="text/javascript" src="./objetos/carroP1/montania.js"></script>
 	
 	<script>
 		function iniciarObjectos3D() {
-			var montaniaRusa = new Montania();
+			montaniaRusa = new Montania();
 			sillas = new Sillas(app.alturaSillas, app.cantidadSillas);
 			farol = new Farol();
-			//farol.escalar(0.5,0.51,0.25);
+			piso = new Piso();
+			//cielo = new Skybox();
 			sillas.rotar(Math.PI/2, vec3.fromValues(1.0,0.0,0.0));
 			sillas.transladar(-5.0, -15.0, 0.0);
-			montaniaRusa.transladar(10.0, 50.0, 0.0);
+			montaniaRusa.transladar(10.0, 20.0, 0.0);
 			
-			animados = [montaniaRusa, sillas, farol];
+			animados = [montaniaRusa, sillas, farol, piso];//, cielo];
 		}
 	</script>
 
-	<center>
-		<h1>Sistemas Gráficos - 66.71</h1>
-		<h2>WebGL - Tp1</h2>
-		<canvas id="my-canvas" width="900" height="500">
-			Your browser does not support the HTML5 canvas element.
-		</canvas>
-	</center>
+	
 </body>
 
 </html>

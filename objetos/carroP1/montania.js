@@ -25,10 +25,10 @@ function Montania() {
       this.agregarHijo(pilar);
     }
 
-    var carrito = new CuerpoCarro();
-    carrito.transladar(1.0, 1.0, 1.2);
-    carrito.escalar(0.25,0.25,0.25);
-    this.agregarHijo(carrito);
+    this.carrito = new CuerpoCarro();
+    this.carrito.transladar(1.0, 1.0, 1.2);
+    this.carrito.escalar(0.25,0.25,0.25);
+    this.agregarHijo(this.carrito);
     var discretizacion = 0.1;
 
     barrido(
@@ -42,6 +42,12 @@ function Montania() {
     );
   }
 
+  this.getPosicion = function(){
+    var pos = this.carrito.getPosicion();
+    
+    return vec3.add(pos, pos, vec3.fromValues(10.0, 20.0, 0.0));//return this.carrito.getPosicion(); 
+  };
   this.crearMontania();
   this.setupWebGLBuffers();
 }
+

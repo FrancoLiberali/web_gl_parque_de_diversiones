@@ -3,10 +3,9 @@ function ExtremoCarro() {
 
   this.crearCarroExtremo = function() {
 
-    //var circulo = new FiguraCarro();
     var figura = new FiguraExtremoCarro();
     var recta = new RectaEnY(0, 0.5);
-    var discretizacion = 0.3;
+    var discretizacion = 0.5;
 
     barrido(
       this.vertex_array,

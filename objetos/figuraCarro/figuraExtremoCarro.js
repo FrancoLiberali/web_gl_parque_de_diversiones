@@ -22,10 +22,11 @@ function FiguraExtremoCarro() {
 
   
 
+
+  Bezier.call(this, this.pts);
   this.cantidadDePuntos = function() {
     return this.puntos.length;
   };
-  Bezier.call(this, this.pts);
 
   this.puntos = [];
   this.normales = [];

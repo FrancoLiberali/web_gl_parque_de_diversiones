@@ -35,7 +35,9 @@ function Bezier(puntosDeControl) {
 
 	CurvaCubica.call(this, this.base, this.baseDer, this.ptos);
 
-	
+	this.cantidadDePuntos = function() {
+    	return this.ptos.length;
+  	};
 	
 	this.curvas = [];
 	

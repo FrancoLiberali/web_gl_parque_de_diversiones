@@ -13,11 +13,11 @@ function FiguraCuerpoCarro() {
 
   this.pts = [p0, p1, p2, p3, p4, p5, p6, p7 ,p8, p9];
 
+  
+  Bezier.call(this, this.pts);
   this.cantidadDePuntos = function() {
     return this.puntos.length;
   };
-  Bezier.call(this, this.pts);
-
   this.puntos = [];
   this.normales = [];
   this.limite = this.cantidadDeCurvas;
