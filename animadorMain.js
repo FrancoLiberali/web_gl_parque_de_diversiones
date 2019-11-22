@@ -432,8 +432,8 @@ function girarFoco(){
   vec3.cross(ejeX, ejeY, eje);
   vec3.normalize(ejeX, ejeX);
   //eje = vec3.nomrmalize(eje, eje);
-  giroX = mat4.fromRotation(giroX, anguloX, ejeX);
-  giroY = mat4.fromRotation(giroY, anguloY, vec3.fromValues(0.0, 1.0, 0.0));
+  giroX = mat4.fromRotation(giroX, -anguloX, ejeX);
+  giroY = mat4.fromRotation(giroY, -anguloY, ejeY);
   foco = vec3.transformMat4(foco, foco, giroX);
   foco = vec3.transformMat4(foco, foco, giroY);
 };

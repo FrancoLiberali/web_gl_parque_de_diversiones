@@ -48,11 +48,12 @@ function agregarTapa(vertexArray, normalArray, forma, normal, matrizDeNivel) {
 
 NORMAL_HACIA_ARRIBA = vec3.fromValues(0, 0, 1);
 
-function barrido(vertexArray, indexArray, normalArray, forma, curva, pasoDiscretizacion, conTapa, escalas = null) {
+function barrido(vertexArray, indexArray, normalArray, forma, curva, pasoDiscretizacion, conTapa, escalas = null, cerrada = false) {
 
   var cantNiveles = 0;
   var tangente = null;
   var matrizDeNivel = null;
+  var matini = mat4.create();
 
   for (var t = curva.limiteInferior; t <= curva.limiteSuperior; t += pasoDiscretizacion) {
     cantNiveles += 1;
@@ -77,6 +78,10 @@ function barrido(vertexArray, indexArray, normalArray, forma, curva, pasoDiscret
       mat4.multiply(matrizDeNivel, matrizDeNivel, matrizEscala);
     }
 
+    if (cantNiveles === 1 && cerrada){
+      matini = matrizDeNivel;        
+    }
+
     if (cantNiveles === 1 && conTapa) {
       cantNiveles += 2;
       agregarTapa(vertexArray, normalArray, forma, tangente, matrizDeNivel);
@@ -87,6 +92,10 @@ function barrido(vertexArray, indexArray, normalArray, forma, curva, pasoDiscret
   if (conTapa) {
     cantNiveles += 2;
     agregarTapa(vertexArray, normalArray, forma, tangente, matrizDeNivel);
+  }
+  if (cerrada){
+    aplicarTransfomacion(vertexArray, normalArray, matini, forma);
+    cantNiveles += 1;
   }
   crearIndexArray(indexArray, cantNiveles, forma.cantidadDePuntos());
 }

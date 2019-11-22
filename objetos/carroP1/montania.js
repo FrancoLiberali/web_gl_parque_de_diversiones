@@ -39,6 +39,8 @@ function Montania() {
       this.recta,
       discretizacion,
       this.conTapa,
+      null,
+      true,
     );
   }
 
