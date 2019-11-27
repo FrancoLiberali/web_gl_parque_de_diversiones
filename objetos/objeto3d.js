@@ -70,7 +70,7 @@ function Objeto3D(conTapa, conEjes = false) {
   }
 
   this.setColorUniforme = function(color) {
-    for (i = 0; i <= this.vertex_array.length; i += 1) {
+    for (i = 0; i < (this.vertex_array.length)/3; i += 1) {
       this.color_array.push(color[0]);
       this.color_array.push(color[1]);
       this.color_array.push(color[2]);

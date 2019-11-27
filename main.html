@@ -76,12 +76,12 @@
 			sillas = new Sillas(app.alturaSillas, app.cantidadSillas);
 			farol = new Farol();
 			piso = new Piso();
-			//cielo = new Skybox();
+			cielo = new Skybox();
 			sillas.rotar(Math.PI/2, vec3.fromValues(1.0,0.0,0.0));
 			sillas.transladar(-5.0, -15.0, 0.0);
 			montaniaRusa.transladar(10.0, 20.0, 0.0);
 			
-			animados = [montaniaRusa, sillas, farol, piso];//, cielo];
+			animados = [montaniaRusa, sillas, farol, piso, cielo];
 		}
 	</script>
 

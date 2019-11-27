@@ -24,9 +24,12 @@ function FiguraCuerpoCarro() {
   this.centro = vec3.fromValues(0.0, 0.0, 0.0);
   
   this.crearCuerpoCarro = function(discretizacion) {
+    var punto_ant = this.parametrizacion(this.limite-discretizacion);
     for(var i = 0; i <= this.limite; i+= discretizacion){
-      this.puntos.push(this.parametrizacion(i));
-      this.normales.push(this.parametrizacion(i));
+      var punto = this.parametrizacion(i);
+      this.puntos.push(punto);
+      this.normales.push(this.calcularNormal(punto, punto_ant));
+      punto_ant = punto;
     }
   }
   this.crearCuerpoCarro(0.1);

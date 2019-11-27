@@ -5,28 +5,7 @@ function CurvaCubica(base, baseDer, puntosDeControl) {
 	this.baseDer = baseDer;
 
 	this.ptos = puntosDeControl;
-	/*
-	//no hay suficientes puntos para armar una curva de Bezier
-	var tmp = (this.ptos.length-4)%3;
-
-	if(tmp != 0){
-		return null;		
-	}
-	this.cantidadDeCurvas = ((this.ptos.length-4)/3)+1;
 	
-	this.curvas = [];
-	
-	//me armo los grafos de control para cada curva
-	var curva = new Array();
-	for(var i = 0; i < this.ptos.length; i++){
-		if((i-4)%3 == 0 &&  (i-4) >= 0){
-			this.curvas.push(curva);
-			curva = new Array(this.ptos[i-1]);
-		}
-		curva.push(this.ptos[i]);
-	}
-	this.curvas.push(curva);
-	*/
 	this.getValor = function(t, base){
 		var i = Math.trunc(t);
 		if(i == this.cantidadDeCurvas) i = i-1; //caso borde
@@ -50,8 +29,6 @@ function CurvaCubica(base, baseDer, puntosDeControl) {
 
 		return resultado;
 	};
-	//CHEQUEAR!
-	//this.cantidadDeCurvas = (this.ptos.length-4)+1;
 
 	Curva.call(this, 0, this.cantidadDeCurvas);
 

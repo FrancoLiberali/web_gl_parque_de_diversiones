@@ -100,9 +100,9 @@ function loadVertexShader() {
     vs_normal_source = code;
     loadShader("./glsl/fragment_normal.glsl", function(code) {
       fs_normal_source = code;
-      loadShader("./glsl/vertex_color.glsl", function(code) {
+      loadShader("./glsl/vertex_test.glsl", function(code) {
         vs_color_source = code;
-        loadShader("./glsl/fragment_color.glsl", function(code) {
+        loadShader("./glsl/fragment_test.glsl", function(code) {
           fs_color_source = code;
           initWebGL();
         })
@@ -210,6 +210,11 @@ function setupVertexShaderMatrix(matrizModelado) {
   var viewMatrixUniform = gl.getUniformLocation(glProgram, "viewMatrix");
   var projMatrixUniform = gl.getUniformLocation(glProgram, "projMatrix");
   var normalMatrixUniform = gl.getUniformLocation(glProgram, "normalMatrix");
+  var lightWorldPositionLocation = gl.getUniformLocation(glProgram, "uLightPosition");
+
+  var lightColorLocation = gl.getUniformLocation(glProgram, "uAmbientColor");
+  var specularColorLocation = gl.getUniformLocation(glProgram, "uDirectionalColor");
+
 
   var modelMatrixFinal = mat4.create();
   mat4.multiply(modelMatrixFinal, rotationMatrix, matrizModelado);
@@ -223,27 +228,34 @@ function setupVertexShaderMatrix(matrizModelado) {
   gl.uniformMatrix4fv(viewMatrixUniform, false, viewMatrix);
   gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
   gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
+  gl.uniform3fv(lightWorldPositionLocation, [0.0, 0.0, 10]);
+
+  var redColor = vec3.fromValues(1.0, 0.6, 0.6);
+  redColor = vec3.normalize(redColor, redColor);
+  // set the light color
+  gl.uniform3fv(lightColorLocation, redColor);  // red light
+  // set the specular color
+  gl.uniform3fv(specularColorLocation, redColor);  // red light
+
 }
 
 function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndexBuffer, colorBuffer, matrizModelado, colors) {
 
   if (colors) {
     glProgram = glColorProgram;
-    gl.useProgram(glProgram);
 
-    vertexColorAttribute = gl.getAttribLocation(glColorProgram, "aVertexColor");
+    vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
     gl.enableVertexAttribArray(vertexColorAttribute);
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
   } else {
     glProgram = glNormalProgram;
-    gl.useProgram(glNormalProgram);
-
-    vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
-    gl.enableVertexAttribArray(vertexNormalAttribute);
-    gl.bindBuffer(gl.ARRAY_BUFFER, trianglesNormalBuffer);
-    gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
   }
+  gl.useProgram(glProgram);
+  vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
+  gl.enableVertexAttribArray(vertexNormalAttribute);
+  gl.bindBuffer(gl.ARRAY_BUFFER, trianglesNormalBuffer);
+  gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
   setupVertexShaderMatrix(matrizModelado);
 

@@ -2,6 +2,7 @@ function Forma() {
   this.puntos = [];
   this.normales = [];
   this.centro = null;
+  this.normalCentro = vec3.fromValues(0.0, -0.1, 0.0);
 
   this.cantidadDePuntos = function() {
     return this.puntos.length;
@@ -42,22 +43,30 @@ function Cuadrado(lado) {
     this.puntos = [
       // duplicados para definir dos normales en cada esquina
       vec3.fromValues(0.0, 0.0, 0.0),
+      vec3.fromValues(0.0, 0.0, 0.0),
+      vec3.fromValues(0.0, 0.0, lado),
       vec3.fromValues(0.0, 0.0, lado),
       vec3.fromValues(0.0, 0.0, lado),
       vec3.fromValues(lado, 0.0, lado),
       vec3.fromValues(lado, 0.0, lado),
+      vec3.fromValues(lado, 0.0, lado),
+      vec3.fromValues(lado, 0.0, 0.0),
       vec3.fromValues(lado, 0.0, 0.0),
       vec3.fromValues(lado, 0.0, 0.0),
       vec3.fromValues(0.0, 0.0, 0.0),
     ]
 
     this.normales = [
+      vec3.fromValues(0.0, -1.0, 0.0),
       vec3.fromValues(-1.0, 0.0, 0.0),
       vec3.fromValues(-1.0, 0.0, 0.0),
+      vec3.fromValues(0.0, -1.0, 0.0),
       vec3.fromValues(0.0, 0.0, 1.0),
       vec3.fromValues(0.0, 0.0, 1.0),
+      vec3.fromValues(0.0, -1.0, 0.0),
       vec3.fromValues(1.0, 0.0, 0.0),
       vec3.fromValues(1.0, 0.0, 0.0),
+      vec3.fromValues(0.0, -1.0, 0.0),
       vec3.fromValues(0.0, 0.0, -1.0),
       vec3.fromValues(0.0, 0.0, -1.0),
     ]

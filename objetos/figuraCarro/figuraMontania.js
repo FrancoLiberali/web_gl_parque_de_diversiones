@@ -1,7 +1,5 @@
 function FiguraMontania() {
 
-
-
   var p0 = vec3.fromValues(-1.0, 0.0, 1.0);
   var p1 = vec3.fromValues(-0.5, 0.0, 0.875);
   var p2 = vec3.fromValues(-0.7, 0.0,  0.2);
@@ -78,9 +76,12 @@ function FiguraMontania() {
   this.centro = vec3.fromValues(0.0, 0.0, 0.3);
 
   this.crearMontania = function(discretizacion) {
+    var punto_ant = this.parametrizacion(this.limite-discretizacion);
     for(var i = 0; i <= this.limite; i+= discretizacion){
-      this.puntos.push(this.parametrizacion(i));
-      this.normales.push(this.parametrizacion(i));
+      var punto = this.parametrizacion(i);
+      this.puntos.push(punto);
+      this.normales.push(this.calcularNormal(punto, punto_ant));
+      punto_ant = punto;
     }
   }
   this.cantidadDePuntos = function() {

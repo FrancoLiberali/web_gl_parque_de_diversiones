@@ -20,9 +20,6 @@ function FiguraExtremoCarro() {
 
   this.pts = [p0, p1, p2, p3, p4, p5, p6, p7 ,p8, p9, p10, p11, p12, p13, p14, p15];
 
-  
-
-
   Bezier.call(this, this.pts);
   this.cantidadDePuntos = function() {
     return this.puntos.length;
@@ -34,9 +31,12 @@ function FiguraExtremoCarro() {
   this.centro = vec3.fromValues(0.0, 0.0, 0.5);
   
   this.crearExtremoCarro = function(discretizacion) {
+    var punto_ant = this.parametrizacion(this.limite-discretizacion);
     for(var i = 0; i <= this.limite; i+= discretizacion){
-      this.puntos.push(this.parametrizacion(i));
-      this.normales.push(this.parametrizacion(i));
+      var punto = this.parametrizacion(i);
+      this.puntos.push(punto);
+      this.normales.push(this.calcularNormal(punto, punto_ant));
+      punto_ant = punto;
     }
   }
   this.crearExtremoCarro(0.1);
