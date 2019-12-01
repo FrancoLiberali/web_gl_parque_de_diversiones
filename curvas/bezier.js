@@ -62,6 +62,15 @@ function Bezier(puntosDeControl) {
     normal = vec3.cross(normal, biNormal, direccionCurva);
     return normal;
     */
+
+    
+    /*
+    var normal = vec3.create();
+    normal = vec3.cross(normal, tangente, vec3.fromValues(0.0, 1.0, 0.0));
+    normal = vec3.normalize(normal, normal);
+    return normal;
+     */
+
     var direccionCurva = vec3.create();
     var normal = vec3.create();
     direccionCurva = vec3.sub(direccionCurva, punto, puntoAnterior);

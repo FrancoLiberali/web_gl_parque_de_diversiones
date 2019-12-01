@@ -1,11 +1,11 @@
-function Cilindro(conTapa = false, conEjes) {
+function Cilindro(conTapa = false, conEjes, alto = 1.0 , radio = 1.0) {
   Objeto3D.call(this, conTapa, conEjes);
 
   this.crearCilindro = function() {
 
-    var circulo = new Circulo(1, 32);
-    var recta = new RectaEnY(0, 1);
-    var discretizacion = 1;
+    var circulo = new Circulo(radio, 32);
+    var recta = new RectaEnY(0, alto);
+    var discretizacion = alto;
 
     barrido(
       this.vertex_array,
@@ -16,7 +16,11 @@ function Cilindro(conTapa = false, conEjes) {
       discretizacion,
       this.conTapa,
     );
+    this.usarColores = true;
+    var color = [1.000,0.261,0.030];
+    this.setColorUniforme(color);
   }
+
   this.crearCilindro();
   this.setupWebGLBuffers();
 }

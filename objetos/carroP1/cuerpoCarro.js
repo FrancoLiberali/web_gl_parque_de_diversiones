@@ -16,6 +16,10 @@ function CuerpoCarro() {
       discretizacion,
       this.conTapa,
     );
+    
+    this.usarColores = true;
+    var color = [0.930,0.827,0.013];
+    this.setColorUniforme(color);
   }
   this.crearCarro = function() {
     this.transladar(-0.75, 0.0, 0.0, 0);
@@ -67,7 +71,7 @@ function CuerpoCarro() {
 
     if (this.vertexBuffer && this.indexBuffer && this.normalBuffer) {
       // dibujar la geometria del objeto, segun la tranformacion de "matrizModeladoFinal"
-      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColores);
+      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.textureBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColores);
     }
     
 

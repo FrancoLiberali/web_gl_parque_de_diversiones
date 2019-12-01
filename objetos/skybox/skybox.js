@@ -1,12 +1,12 @@
  
 function Skybox() {
-  Objeto3D.call(this, true, true); //Objeto3D.call(this, conTapa);
+  Objeto3D.call(this, false, true); //Objeto3D.call(this, conTapa);
 
   this.crearSkybox = function() {
-    var radio = 80.0;
-    var semiCirculo = new Circulo(radio, 64, Math.PI/2);
+    var radio = 40.0;
+    var semiCirculo = new Circulo(radio, 64, Math.PI);
     var discretizacion = Math.PI / 32;
-
+    
     revolucion(
       this.vertex_array,
       this.index_array,
@@ -16,7 +16,7 @@ function Skybox() {
       discretizacion
     );
   }
-  this.crearSkybox()
+  this.crearSkybox();
   this.usarColores = true;
   var color = [0.1333, 0.4431, 0.702];
   this.setColorUniforme(color);;

@@ -4,11 +4,21 @@ function Objeto3D(conTapa, conEjes = false) {
   this.indexBuffer = null;
   this.normalBuffer = null;
   this.colorBuffer = null;
+  
+
+  this.textureBuffer = null;
+  //this.texture = null;
+  this.hasTexture = false;
 
   this.vertex_array = [];
   this.index_array = [];
   this.normal_array = [];
   this.color_array = [];
+  this.texture_array = [];
+
+  this.texturas=[];
+  
+
   this.conTapa = conTapa;
   this.conEjes = conEjes;
 
@@ -61,6 +71,10 @@ function Objeto3D(conTapa, conEjes = false) {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
     this.indexBuffer.number_vertex_point = this.index_array.length;
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_array), gl.STATIC_DRAW);
+
+    this.textureBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.textureBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texture_array), gl.STATIC_DRAW);
   }
 
   this.setGeometria = function(vertexArray, indexArray, normalArray) {
@@ -82,6 +96,28 @@ function Objeto3D(conTapa, conEjes = false) {
     return null;
   };
 
+  this.initTexture = function(texture_file){
+            
+    var texture = gl.createTexture();
+    texture.image = new Image();
+    
+
+    texture.image.onload = function () {
+            
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+      gl.generateMipmap(gl.TEXTURE_2D);
+
+      gl.bindTexture(gl.TEXTURE_2D, null);
+
+      }
+      this.texturas.push(texture);
+      texture.image.src = texture_file;
+  }
+
   this.dibujar = function(matrizPadre, conEjes) {
     var matrizModeladoFinal = mat4.create();
     // aplicar rotacion generada por setRotacion;
@@ -91,7 +127,7 @@ function Objeto3D(conTapa, conEjes = false) {
 
     if (this.vertexBuffer && this.indexBuffer && this.normalBuffer) {
       // dibujar la geometria del objeto, segun la tranformacion de "matrizModeladoFinal"
-      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColores);
+      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.textureBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColores, this.texturas);
 
     }
 

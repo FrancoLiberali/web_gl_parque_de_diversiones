@@ -69,8 +69,6 @@ var alfa = 0;
 var beta = 0;
 
 
-
-
 NORMAL_HACIA_ARRIBA = vec3.fromValues(0, 0, 1);
 
 var animados = [];
@@ -94,8 +92,14 @@ var vs_normal_source = "";
 var fs_normal_source = "";
 var vs_color_source = "";
 var fs_color_source = "";
+var vs_texture_source = "";
+var fs_texture_source = "";
+var vs_piso_source = "";
+var fs_piso_source = "";
 
-function loadVertexShader() {
+
+
+function loadVertexShader(imagenesCargadas) {
   loadShader("./glsl/vertex_normal.glsl", function(code) {
     vs_normal_source = code;
     loadShader("./glsl/fragment_normal.glsl", function(code) {
@@ -104,14 +108,26 @@ function loadVertexShader() {
         vs_color_source = code;
         loadShader("./glsl/fragment_test.glsl", function(code) {
           fs_color_source = code;
-          initWebGL();
-        })
+          loadShader("./glsl/vertex_skybox.glsl", function(code) {
+            vs_texture_source = code;
+            loadShader("./glsl/fragment_skybox.glsl", function(code) {
+              fs_texture_source = code;
+              loadShader("./glsl/vertex_piso.glsl", function(code) {
+                vs_piso_source = code;
+                loadShader("./glsl/fragment_piso.glsl", function(code) {
+                  fs_piso_source = code;
+                  initWebGL(imagenesCargadas);
+                })
+              })
+            })          
+          })  
+        })  
       })
     })
   })
 };
 
-function initWebGL() {
+function initWebGL(imagenesCargadas) {
 
   canvas = document.getElementById("my-canvas");
 
@@ -124,7 +140,7 @@ function initWebGL() {
   if (gl) {
     setupWebGL();
     initShaders();
-    iniciarObjectos3D();
+    iniciarObjectos3D(imagenesCargadas);
     tick();
   } else {
     alert("Error: Your browser does not appear to support WebGL.");
@@ -159,10 +175,16 @@ function initShaders() {
   fragmentNormalShader = makeShader(fs_normal_source, gl.FRAGMENT_SHADER);
   vertexColorShader = makeShader(vs_color_source, gl.VERTEX_SHADER);
   fragmentColorShader = makeShader(fs_color_source, gl.FRAGMENT_SHADER);
+  vertexSkyboxShader = makeShader(vs_texture_source, gl.VERTEX_SHADER);
+  fragmentSkyboxShader = makeShader(fs_texture_source, gl.FRAGMENT_SHADER);
+  vertexPisoShader = makeShader(vs_piso_source, gl.VERTEX_SHADER);
+  fragmentPisoShader = makeShader(fs_piso_source, gl.FRAGMENT_SHADER);
 
   //create program
   glColorProgram = gl.createProgram();
   glNormalProgram = gl.createProgram();
+  glSkyboxProgram = gl.createProgram();
+  glPisoProgram = gl.createProgram();
 
   // attach and link shaders to the program
   gl.attachShader(glNormalProgram, vertexNormalShader);
@@ -179,6 +201,24 @@ function initShaders() {
   gl.linkProgram(glColorProgram);
 
   if (!gl.getProgramParameter(glColorProgram, gl.LINK_STATUS)) {
+    alert("Unable to initialize the shader program.");
+  }
+
+  // attach and link shaders to the program
+  gl.attachShader(glSkyboxProgram, vertexSkyboxShader);
+  gl.attachShader(glSkyboxProgram, fragmentSkyboxShader);
+  gl.linkProgram(glSkyboxProgram);
+
+  if (!gl.getProgramParameter(glSkyboxProgram, gl.LINK_STATUS)) {
+    alert("Unable to initialize the shader program.");
+  }
+
+  // attach and link shaders to the program
+  gl.attachShader(glPisoProgram, vertexPisoShader);
+  gl.attachShader(glPisoProgram, fragmentPisoShader);
+  gl.linkProgram(glPisoProgram);
+
+  if (!gl.getProgramParameter(glPisoProgram, gl.LINK_STATUS)) {
     alert("Unable to initialize the shader program.");
   }
 
@@ -210,17 +250,30 @@ function setupVertexShaderMatrix(matrizModelado) {
   var viewMatrixUniform = gl.getUniformLocation(glProgram, "viewMatrix");
   var projMatrixUniform = gl.getUniformLocation(glProgram, "projMatrix");
   var normalMatrixUniform = gl.getUniformLocation(glProgram, "normalMatrix");
+  
   var lightWorldPositionLocation = gl.getUniformLocation(glProgram, "uLightPosition");
+  var lightWorldPositionLocation1 = gl.getUniformLocation(glProgram, "uLightPosition1");
+  var lightWorldPositionLocation2 = gl.getUniformLocation(glProgram, "uLightPosition2");
+  var lightWorldPositionLocation3 = gl.getUniformLocation(glProgram, "uLightPosition3");
+  var lightWorldPositionLocation4 = gl.getUniformLocation(glProgram, "uLightPosition4");
+  var lightWorldPositionLocation5 = gl.getUniformLocation(glProgram, "uLightPosition5");
+  var lightWorldPositionLocation6 = gl.getUniformLocation(glProgram, "uLightPosition6");
+  var lightWorldPositionLocation7 = gl.getUniformLocation(glProgram, "uLightPosition7");
+  var lightWorldPositionLocation8 = gl.getUniformLocation(glProgram, "uLightPosition8");
 
   var lightColorLocation = gl.getUniformLocation(glProgram, "uAmbientColor");
   var specularColorLocation = gl.getUniformLocation(glProgram, "uDirectionalColor");
+
+  
+
+  noiseScale = gl.getUniformLocation(glProgram, "noiseScale");
 
 
   var modelMatrixFinal = mat4.create();
   mat4.multiply(modelMatrixFinal, rotationMatrix, matrizModelado);
 
   mat4.identity(normalMatrix);
-  mat4.multiply(normalMatrix, viewMatrix, modelMatrixFinal);
+  mat4.multiply(normalMatrix, normalMatrix, modelMatrixFinal);
   mat4.invert(normalMatrix, normalMatrix);
   mat4.transpose(normalMatrix, normalMatrix);
 
@@ -228,34 +281,107 @@ function setupVertexShaderMatrix(matrizModelado) {
   gl.uniformMatrix4fv(viewMatrixUniform, false, viewMatrix);
   gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
   gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
-  gl.uniform3fv(lightWorldPositionLocation, [0.0, 0.0, 10]);
+  
+  gl.uniform3fv(lightWorldPositionLocation, [0.0, 0.0, 3.0]);
+  gl.uniform3fv(lightWorldPositionLocation1, posicionFarol1);
+  gl.uniform3fv(lightWorldPositionLocation2, posicionFarol2);
+  gl.uniform3fv(lightWorldPositionLocation3, posicionFarol3);
+  gl.uniform3fv(lightWorldPositionLocation4, posicionFarol4);
+  gl.uniform3fv(lightWorldPositionLocation5, posicionFarol5);
+  gl.uniform3fv(lightWorldPositionLocation6, posicionFarol6);
+  gl.uniform3fv(lightWorldPositionLocation7, posicionFarol7);
+  gl.uniform3fv(lightWorldPositionLocation8, posicionFarol8);
 
-  var redColor = vec3.fromValues(1.0, 0.6, 0.6);
-  redColor = vec3.normalize(redColor, redColor);
+  var sunColor = vec3.fromValues(0.947,1.000,0.222);
+  var lightColor = vec3.fromValues(0.853,1.000,0.804);
+  //sunColor = vec3.normalize(sunColor, sunColor);
+  sunColor = vec3.normalize(sunColor, sunColor);
+  lightColor = vec3.normalize(lightColor, lightColor);
   // set the light color
-  gl.uniform3fv(lightColorLocation, redColor);  // red light
+  gl.uniform3fv(lightColorLocation, sunColor);  // red light
   // set the specular color
-  gl.uniform3fv(specularColorLocation, redColor);  // red light
+  gl.uniform3fv(specularColorLocation, lightColor);  // red light
 
 }
 
-function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndexBuffer, colorBuffer, matrizModelado, colors) {
+function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndexBuffer, trianglesTextureBuffer, colorBuffer, matrizModelado, colors, texture) {
 
   if (colors) {
-    glProgram = glColorProgram;
+    glProgram = glNormalProgram;//glColorProgram;
+    gl.useProgram(glProgram);
 
     vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
     gl.enableVertexAttribArray(vertexColorAttribute);
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
-  } else {
+
+    vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
+    gl.enableVertexAttribArray(vertexNormalAttribute);
+    gl.bindBuffer(gl.ARRAY_BUFFER, trianglesNormalBuffer);
+    gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+  
+
+  } else if (texture.length === 3){
+    glProgram = glPisoProgram;
+    gl.useProgram(glProgram);
+
+
+    vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
+    gl.enableVertexAttribArray(vertexNormalAttribute);
+    gl.bindBuffer(gl.ARRAY_BUFFER, trianglesNormalBuffer);
+    gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+
+    vertexColorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
+    gl.enableVertexAttribArray(vertexColorAttribute);
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
+
+    samplerUniform0 = gl.getUniformLocation(glProgram, "uSampler0");
+    samplerUniform1 = gl.getUniformLocation(glProgram, "uSampler1");
+    samplerUniform2 = gl.getUniformLocation(glProgram, "uSampler2");
+
+    vertexTextureAttribute = gl.getAttribLocation(glProgram, "aTextureCoord");
+    gl.enableVertexAttribArray(vertexTextureAttribute);
+    gl.bindBuffer(gl.ARRAY_BUFFER, trianglesTextureBuffer);
+    gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, texture[0]);
+    gl.uniform1i(samplerUniform0, 0);
+
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, texture[1]);
+    gl.uniform1i(samplerUniform1, 1);
+
+    gl.activeTexture(gl.TEXTURE2);
+    gl.bindTexture(gl.TEXTURE_2D, texture[2]);
+    gl.uniform1i(samplerUniform2, 2);
+
+    //gl.uniform1f(noiseScale, 5.0);
+
+  }else if (texture[0]){
+    glProgram = glSkyboxProgram;
+    gl.useProgram(glProgram);
+
+    vertexTextureAttribute = gl.getAttribLocation(glProgram, "aTextureCoord");
+    gl.enableVertexAttribArray(vertexTextureAttribute);
+    gl.bindBuffer(gl.ARRAY_BUFFER, trianglesTextureBuffer);
+    gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, texture[0]);
+    gl.uniform1i(samplerUniform0, 0);
+
+  }  else {
     glProgram = glNormalProgram;
+    gl.useProgram(glProgram);
+
+    vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
+    gl.enableVertexAttribArray(vertexNormalAttribute);
+    gl.bindBuffer(gl.ARRAY_BUFFER, trianglesNormalBuffer);
+    gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
   }
-  gl.useProgram(glProgram);
-  vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
-  gl.enableVertexAttribArray(vertexNormalAttribute);
-  gl.bindBuffer(gl.ARRAY_BUFFER, trianglesNormalBuffer);
-  gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+  
+  
 
   setupVertexShaderMatrix(matrizModelado);
 
@@ -300,7 +426,7 @@ function tick() {
   animate();
 }
 
-window.onload = loadVertexShader;
+window.onload = loadImages(loadVertexShader);
 
 E = 69;
 Q = 81;
@@ -475,4 +601,36 @@ function girarCamara(){
     tmp[2] = 0;
 
   camara = tmp;
+};
+
+
+
+function loadImages(callback) {
+  var imagenes = [];  
+  var urls = ["./objetos/tierra.jpg",
+        "./objetos//tierraSeca.jpg",
+        "./objetos/pasto.jpg",
+      ];
+  var imagesToLoad = urls.length;
+     
+  // Called each time an image finished loading.
+  var onImageLoad = function() {
+    --imagesToLoad;
+    // If all the images are loaded call the callback.
+    if (imagesToLoad == 0) {
+      callback(imagenes);
+      }
+    };
+     
+  for (var ii = 0; ii < imagesToLoad; ++ii) {
+    var image = loadImage(urls[ii], onImageLoad);
+    imagenes.push(image);
+  }
+};
+
+function loadImage(url, callback) {
+  var image = new Image();
+  image.src = url;
+  image.onload = callback;
+  return image;
 };

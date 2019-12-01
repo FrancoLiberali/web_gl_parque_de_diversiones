@@ -70,18 +70,57 @@
 
 	<script type="text/javascript" src="./objetos/carroP1/montania.js"></script>
 	
+	<script type="text/javascript" src="./objetos/skyboxSphere/skyboxSphere.js"></script>
+
+
 	<script>
-		function iniciarObjectos3D() {
+		function iniciarObjectos3D(imagenesCargadas) {
+
+			var h = 3.0;
+			posicionFarol1 = vec3.fromValues(15.0, 22.0, h);
+			posicionFarol2 = vec3.fromValues(8.0, 10.0, h);
+			posicionFarol3 = vec3.fromValues(-8.0, -10.0, h);
+			posicionFarol4 = vec3.fromValues(-9.0, -20.0, h);
+			posicionFarol5 = vec3.fromValues(3.0, -10.0, h);
+			posicionFarol6 = vec3.fromValues(-5.0, 18.0, h);
+			posicionFarol7 = vec3.fromValues(0.0, 10.0, h);
+			posicionFarol8 = vec3.fromValues(0.0, -15.0, h);
+
+			farol = new Farol();
+			farol1 = new Farol();
+			farol2 = new Farol();
+			farol3 = new Farol();
+			farol4 = new Farol();
+			farol5 = new Farol();
+			farol6 = new Farol();
+			farol7 = new Farol();
+			farol8 = new Farol();
+			
+			piso = new Piso(imagenesCargadas);
+
+			earth = new TexturedSphere(128, 128);
+
+			farol1.transladar(posicionFarol1[0], posicionFarol1[1], 0.0);
+			farol2.transladar(posicionFarol2[0], posicionFarol2[1], 0.0);
+			farol3.transladar(posicionFarol3[0], posicionFarol3[1], 0.0);
+			farol4.transladar(posicionFarol4[0], posicionFarol4[1], 0.0);
+			farol5.transladar(posicionFarol5[0], posicionFarol5[1], 0.0);
+			farol6.transladar(posicionFarol6[0], posicionFarol6[1], 0.0);
+			farol7.transladar(posicionFarol7[0], posicionFarol7[1], 0.0);
+			farol8.transladar(posicionFarol8[0], posicionFarol8[1], 0.0);
+	
+
 			montaniaRusa = new Montania();
 			sillas = new Sillas(app.alturaSillas, app.cantidadSillas);
-			farol = new Farol();
-			piso = new Piso();
-			cielo = new Skybox();
+			
+
+			
+			//cielo = new Skybox();
 			sillas.rotar(Math.PI/2, vec3.fromValues(1.0,0.0,0.0));
 			sillas.transladar(-5.0, -15.0, 0.0);
 			montaniaRusa.transladar(10.0, 20.0, 0.0);
 			
-			animados = [montaniaRusa, sillas, farol, piso, cielo];
+			animados = [montaniaRusa, sillas, piso, farol, farol1, farol2, farol3, farol4, farol5, farol6, farol7, farol8, earth];
 		}
 	</script>
 

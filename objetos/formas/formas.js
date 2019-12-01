@@ -19,7 +19,9 @@ function Circulo(radio, discretizacion, limite = 2 * Math.PI) {
     var anguloDiscretizacion = 2 * Math.PI / discretizacion;
     for (var angulo = 0; angulo <= this.limite; angulo += anguloDiscretizacion) {
       var direccion = vec3.fromValues(Math.cos(angulo), 0.0, Math.sin(angulo));
-      this.normales.push(direccion);
+      var t = vec3.fromValues(direccion[0], direccion[1],direccion[2]);
+      //t = vec3.scale(t, direccion, -1);
+      this.normales.push(t);
       vec3.scale(direccion, direccion, radio);
       this.puntos.push(direccion);
     }
@@ -42,33 +44,20 @@ function Cuadrado(lado) {
   this.crearCuadrado = function() {
     this.puntos = [
       // duplicados para definir dos normales en cada esquina
+      
       vec3.fromValues(0.0, 0.0, 0.0),
-      vec3.fromValues(0.0, 0.0, 0.0),
-      vec3.fromValues(0.0, 0.0, lado),
-      vec3.fromValues(0.0, 0.0, lado),
       vec3.fromValues(0.0, 0.0, lado),
       vec3.fromValues(lado, 0.0, lado),
-      vec3.fromValues(lado, 0.0, lado),
-      vec3.fromValues(lado, 0.0, lado),
-      vec3.fromValues(lado, 0.0, 0.0),
-      vec3.fromValues(lado, 0.0, 0.0),
       vec3.fromValues(lado, 0.0, 0.0),
       vec3.fromValues(0.0, 0.0, 0.0),
     ]
 
     this.normales = [
       vec3.fromValues(0.0, -1.0, 0.0),
-      vec3.fromValues(-1.0, 0.0, 0.0),
-      vec3.fromValues(-1.0, 0.0, 0.0),
       vec3.fromValues(0.0, -1.0, 0.0),
-      vec3.fromValues(0.0, 0.0, 1.0),
-      vec3.fromValues(0.0, 0.0, 1.0),
       vec3.fromValues(0.0, -1.0, 0.0),
-      vec3.fromValues(1.0, 0.0, 0.0),
-      vec3.fromValues(1.0, 0.0, 0.0),
       vec3.fromValues(0.0, -1.0, 0.0),
-      vec3.fromValues(0.0, 0.0, -1.0),
-      vec3.fromValues(0.0, 0.0, -1.0),
+      vec3.fromValues(0.0, -1.0, 0.0),
     ]
   };
 

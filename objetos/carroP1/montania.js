@@ -13,11 +13,11 @@ function Montania() {
     // cte(o lo mas cercano a ello).  
     for(var i = 0; i <= this.recta.cantidadDeCurvas; i += (this.recta.cantidadDeCurvas/nPilares) ){
       var pto = this.recta.parametrizacion(i);
-      var pilar = new Cilindro(false, true);
+      var pilar = new Cilindro(false, true, 8/7*pto[2], 0.125);
       // modifico con la misma cantidad el eje x y z para disminuir el radio del cilindro
       // y es y le escalo la altura de la montaña rusa
       //Nota eso ultimo funciona asi ya que el cilindro tiene y = 1; 
-      pilar.escalar(0.125,5/5*pto[2],0.125);
+      //pilar.escalar(0.125,5/5*pto[2],0.125);
       //Lo acomodo
       pilar.rotar(Math.PI/2, vec3.fromValues(1.0,0.0,0.0));
       //Lo ubico en el mismo lugar que la montaña proyectada sobre el plano xy
@@ -44,7 +44,7 @@ function Montania() {
     );
 
     this.usarColores = true;
-    var color = [0.5412, 0.5843, 0.5922];
+    var color = [0.269,0.355,0.345];
     this.setColorUniforme(color);
   }
 

@@ -1,10 +1,9 @@
 precision highp float;
 
-
 attribute vec3 aVertexPosition;
 attribute vec3 aVertexNormal;
 attribute vec3 aVertexColor;
-
+attribute vec2 aTextureCoord;
 
 uniform mat4 modelMatrix;               // matriz de modelado
 uniform mat4 viewMatrix;                // matriz de vista
@@ -39,6 +38,8 @@ varying vec3 vLightDir6;
 varying vec3 vLightDir7;
 varying vec3 vLightDir8;
 
+varying vec2 vTextureCoord;
+
 void main(void) {
     // Transformamos al vertice al espacio de la camara
     vec4 pos_camera_view = viewMatrix * modelMatrix * vec4(aVertexPosition, 1.0);
@@ -61,4 +62,6 @@ void main(void) {
     vLightDir8 = uLightPosition8 - pos;
 
     vViewDir = normalize(-pos);
+
+    vTextureCoord = aTextureCoord;
 }

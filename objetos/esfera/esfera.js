@@ -2,7 +2,7 @@ function Esfera() {
   Objeto3D.call(this);
 
   this.crearEsfera = function() {
-    var semiCirculo = new Circulo(1.5, 64, Math.PI);
+    var semiCirculo = new Circulo(0.3, 64, Math.PI);
     var discretizacion = Math.PI / 32;
 
     revolucion(
@@ -13,6 +13,8 @@ function Esfera() {
       vec3.fromValues(1.0, 0.0, 0.0),
       discretizacion
     );
+    var color = [0.740,0.995,0.908];
+    this.setColorUniforme(color);
   }
   this.crearEsfera();
   this.setupWebGLBuffers();
