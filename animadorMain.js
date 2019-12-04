@@ -369,6 +369,7 @@ function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndex
     gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, texture[0]);
+    samplerUniform0 = gl.getUniformLocation(glProgram, "uSampler0");
     gl.uniform1i(samplerUniform0, 0);
 
   }  else {

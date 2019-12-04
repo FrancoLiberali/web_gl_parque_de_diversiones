@@ -52,6 +52,8 @@
 	
 	<script type="text/javascript" src="./objetos/cono/cono.js"></script>
 	<script type="text/javascript" src="./objetos/sillas/sillas.js"></script>
+	<script type="text/javascript" src="./objetos/sillas/cilindroSilla.js"></script>
+	<script type="text/javascript" src="./objetos/sillas/conoSilla.js"></script>
 
 	<script type="text/javascript" src="./objetos/figuraCarro/figuraCuerpoCarro.js"></script>
 	<script type="text/javascript" src="./objetos/figuraCarro/figuraExtremoCarro.js"></script>
@@ -71,7 +73,7 @@
 	<script type="text/javascript" src="./objetos/carroP1/montania.js"></script>
 	
 	<script type="text/javascript" src="./objetos/skyboxSphere/skyboxSphere.js"></script>
-
+	
 
 	<script>
 		function iniciarObjectos3D(imagenesCargadas) {
@@ -112,8 +114,8 @@
 
 			montaniaRusa = new Montania();
 			sillas = new Sillas(app.alturaSillas, app.cantidadSillas);
-			
-
+			//cilindro = new CilindroSilla(false, true, 1.0, 1.0);
+			//cilindro = new ConoSilla();
 			
 			//cielo = new Skybox();
 			sillas.rotar(Math.PI/2, vec3.fromValues(1.0,0.0,0.0));

@@ -4,22 +4,22 @@ function Sillas(h, cant_sillas) {
   Objeto3D.call(this, false, true);
 
   this.crearSillas = function() {
-    var primerCilindro = new Cilindro(false, false);
-    primerCilindro.escalar(0.25, 0.5, 0.25);
+    var primerCilindro = new Cilindro(false, false, 0.5, 0.25);
+    //primerCilindro.escalar(0.25, 0.5, 0.25);
     this.agregarHijo(primerCilindro);
 
-    var primerCono = new Cono(false, false, 15);
-    primerCono.escalar(0.25, 1.0, 0.25);
+    var primerCono = new Cono(false, false, 15, 1.0, 0.25);
+    //primerCono.escalar(0.25, 1.0, 0.25);
     primerCono.transladar(0.0, 0.5, 0.0);
     this.agregarHijo(primerCono);
 
-    var segundoCilindro = new Cilindro(false, false);
-    segundoCilindro.escalar(0.25 * 0.85, 0.1, 0.25 * 0.85);
+    var segundoCilindro = new Cilindro(false, false, 0.1, 0.25 * 0.85);
+    //segundoCilindro.escalar(0.25 * 0.85, 0.1, 0.25 * 0.85);
     segundoCilindro.transladar(0.0, 0.5 + 0.15, 0.0);
     this.agregarHijo(segundoCilindro);
 
-    var segundoCono = new Cono(false, false, 10);
-    segundoCono.escalar(0.25 * 0.85, 0.5, 0.25 * 0.85);
+    var segundoCono = new Cono(false, false, 10, 0.5, 0.25 * 0.85);
+    //segundoCono.escalar(0.25 * 0.85, 0.5, 0.25 * 0.85);
     segundoCono.transladar(0.0, 0.5 + 0.15 + 0.1, 0.0);
     this.agregarHijo(segundoCono);
 
@@ -27,8 +27,8 @@ function Sillas(h, cant_sillas) {
     this.girable.transladar(0.0, 0.5 + 0.15 + 0.1 + 0.05, 0.0);
     this.agregarHijo(this.girable);
 
-    var tercerCilindro = new Cilindro(true, true);
-    tercerCilindro.escalar(0.25 * 0.85 * 0.9, 1.0 * h, 0.25 * 0.85 * 0.9);
+    var tercerCilindro = new CilindroSilla(true, true, 1.0 * h, 0.25 * 0.85 * 0.9, "./objetos/patron1.png");
+    //tercerCilindro.escalar(0.25 * 0.85 * 0.9, 1.0 * h, 0.25 * 0.85 * 0.9);
     this.girable.agregarHijo(tercerCilindro);
 
     TAMAÑO_ROTABLE = 1.2;
@@ -40,15 +40,15 @@ function Sillas(h, cant_sillas) {
     escable.escalar(TAMAÑO_ROTABLE, 1.0, TAMAÑO_ROTABLE);
     this.rotable.agregarHijo(escable);
 
-    var cuartoCilindro = new Cilindro(false, false);
-    cuartoCilindro.escalar(1.0, 0.15, 1.0);
+    var cuartoCilindro = new CilindroSilla(false, false, 0.15, 1.0, "./objetos/patron3.png");
+    //cuartoCilindro.escalar(1.0, 0.15, 1.0);
     escable.agregarHijo(cuartoCilindro);
-    var conoAbajo = new Cono(false, false);
-    conoAbajo.escalar(1.0, 0.15, 1.0);
+    var conoAbajo = new ConoSilla(false, false);
+    //conoAbajo.escalar(1.0, 0.15, 1.0);
     conoAbajo.rotar(Math.PI, vec3.fromValues(0.0, 0.0, 1.0));
     escable.agregarHijo(conoAbajo);
-    var conoArriba = new Cono(false, false);
-    conoArriba.escalar(1.0, 0.15, 1.0);
+    var conoArriba = new ConoSilla(false, false);
+    //conoArriba.escalar(1.0, 0.15, 1.0);
     conoArriba.transladar(0.0, 0.15, 0.0);
     escable.agregarHijo(conoArriba);
 
@@ -67,8 +67,8 @@ function Sillas(h, cant_sillas) {
       sillaCable.transladar(DISTANCIA_CABLE_CENTRO * Math.cos(angulo), 0.0, DISTANCIA_CABLE_CENTRO * Math.sin(angulo));
       this.sillasCables.push(sillaCable);
 
-      var cable = new Cilindro(false, false);
-      cable.escalar(0.02, TAMAÑO_CABLE, 0.02);
+      var cable = new Cilindro(false, false, TAMAÑO_CABLE, 0.02);
+      //cable.escalar(0.02, TAMAÑO_CABLE, 0.02);
       cable.transladar(0.0, -TAMAÑO_CABLE, 0.0);
       sillaCable.agregarHijo(cable);
 

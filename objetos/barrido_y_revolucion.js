@@ -18,15 +18,26 @@ function aplicarTransfomacionAVectores(array, matrizTransformacion, vectores) {
   });
 }
 
-function aplicarTransfomacion(vertexArray, normalArray, matrizTransformacion, forma) {
+function aplicarTransfomacionAVectoresNormales(array, matrizTransformacion, vectores) {
+  _.each(vectores, function(vector) {
+    var vectorTransformado = vec3.create();
+    // Aplico transformacion
+    vec3.transformMat4(vectorTransformado, vector, matrizTransformacion);
+    // Agrego el vectorTransformado al arreglo
+    vectorTransformado=vec3.normalize(vectorTransformado,vectorTransformado);
+    llenarArray(array, vectorTransformado);
+  });
+}
+
+function aplicarTransfomacion(vertexArray, normalArray, matrizTransformacion, forma, matrizDeNivelNormal) {
   var matrizTransformacionNormales = mat4.create();
-  mat4.invert(matrizTransformacionNormales, matrizTransformacion);
+  mat4.invert(matrizTransformacionNormales, matrizDeNivelNormal);
   mat4.transpose(matrizTransformacionNormales, matrizTransformacionNormales);
 
   // Se aplica la tranformacion correspondiente a cada punto
   aplicarTransfomacionAVectores(vertexArray, matrizTransformacion, forma.puntos);
   // Se aplica la tranformacion correspondiente a cada normal
-  aplicarTransfomacionAVectores(normalArray, matrizTransformacionNormales, forma.normales);
+  aplicarTransfomacionAVectoresNormales(normalArray, matrizTransformacionNormales, forma.normales);
 }
 
 function agregarTapa(vertexArray, normalArray, forma, normal, matrizDeNivel) {
@@ -53,6 +64,7 @@ function barrido(vertexArray, indexArray, normalArray, forma, curva, pasoDiscret
   var cantNiveles = 0;
   var tangente = null;
   var matrizDeNivel = null;
+  var matrizDeNivelNormal = null;
   var matini = mat4.create();
 
   for (var t = curva.limiteInferior; t <= curva.limiteSuperior; t += pasoDiscretizacion) {
@@ -66,6 +78,17 @@ function barrido(vertexArray, indexArray, normalArray, forma, curva, pasoDiscret
 
     var translacion = curva.evaluarEn(t);
     matrizDeNivel = mat4.fromValues(
+      binormal[X], binormal[Y], binormal[Z], 0,
+      tangente[X], tangente[Y], tangente[Z], 0,
+      normal[X], normal[Y], normal[Z], 0,
+      translacion[X], translacion[Y], translacion[Z], 1
+    );
+
+    
+    //if(translacion[X] != 0 || translacion[Y] != 0 || translacion[Z] != 0)
+    translacion = vec3.normalize(translacion, translacion);
+
+    matrizDeNivelNormal = mat4.fromValues(
       binormal[X], binormal[Y], binormal[Z], 0,
       tangente[X], tangente[Y], tangente[Z], 0,
       normal[X], normal[Y], normal[Z], 0,
@@ -87,14 +110,14 @@ function barrido(vertexArray, indexArray, normalArray, forma, curva, pasoDiscret
       agregarTapa(vertexArray, normalArray, forma, tangente, matrizDeNivel);
     }
 
-    aplicarTransfomacion(vertexArray, normalArray, matrizDeNivel, forma);
+    aplicarTransfomacion(vertexArray, normalArray, matrizDeNivel, forma, matrizDeNivelNormal);
   }
   if (conTapa) {
     cantNiveles += 2;
     agregarTapa(vertexArray, normalArray, forma, tangente, matrizDeNivel);
   }
   if (cerrada){
-    aplicarTransfomacion(vertexArray, normalArray, matini, forma);
+    aplicarTransfomacion(vertexArray, normalArray, matini, forma, matrizDeNivelNormal);
     cantNiveles += 1;
   }
   crearIndexArray(indexArray, cantNiveles, forma.cantidadDePuntos());
@@ -104,7 +127,7 @@ function aplicarRotacion(vertexArray, normalArray, angulo, eje, forma) {
   var matrizRotacion = mat4.create();
   mat4.fromRotation(matrizRotacion, angulo, eje);
 
-  aplicarTransfomacion(vertexArray, normalArray, matrizRotacion, forma);
+  aplicarTransfomacion(vertexArray, normalArray, matrizRotacion, forma, matrizRotacion);
 }
 
 function revolucion(vertexArray, indexArray, normalArray, forma, eje, paso) {
