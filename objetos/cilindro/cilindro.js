@@ -17,10 +17,11 @@ function Cilindro(conTapa = false, conEjes, alto = 1.0 , radio = 1.0) {
       this.conTapa,
     );
     this.usarColores = true;
-    var color = [1.000,0.261,0.030];
-    this.setColorUniforme(color);
+    //var color = [1.000,0.261,0.030];
+    //this.setColorUniforme(color);
   }
 
   this.crearCilindro();
   this.setupWebGLBuffers();
+  this.initTexture("./objetos/sunset.jpg");
 }

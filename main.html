@@ -76,7 +76,7 @@
 	
 
 	<script>
-		function iniciarObjectos3D(imagenesCargadas) {
+		function iniciarObjectos3D() {
 
 			var h = 3.0;
 			posicionFarol1 = vec3.fromValues(15.0, 22.0, h);
@@ -98,7 +98,7 @@
 			farol7 = new Farol();
 			farol8 = new Farol();
 			
-			piso = new Piso(imagenesCargadas);
+			piso = new Piso();
 
 			earth = new TexturedSphere(128, 128);
 
@@ -122,7 +122,7 @@
 			sillas.transladar(-5.0, -15.0, 0.0);
 			montaniaRusa.transladar(10.0, 20.0, 0.0);
 			
-			animados = [montaniaRusa, sillas, piso, farol, farol1, farol2, farol3, farol4, farol5, farol6, farol7, farol8, earth];
+			animados = [montaniaRusa, sillas, piso, earth, farol, farol1, farol2, farol3, farol4, farol5, farol6, farol7, farol8];
 		}
 	</script>
 

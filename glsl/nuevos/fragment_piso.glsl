@@ -2,7 +2,11 @@ precision highp float;
 
 uniform vec3 uAmbientColor;
 uniform vec3 uDirectionalColor;
-varying vec3 vVertexColor;
+uniform float noiseScale;
+uniform sampler2D uSampler;
+uniform sampler2D uSampler1;
+uniform sampler2D uSampler2;
+
 varying vec3 vNormal;
 varying vec3 vViewDir;
 varying vec3 vLightDir;
@@ -14,11 +18,6 @@ varying vec3 vLightDir5;
 varying vec3 vLightDir6;
 varying vec3 vLightDir7;
 varying vec3 vLightDir8;
-
-uniform float noiseScale;
-uniform sampler2D uSampler0;
-uniform sampler2D uSampler1;
-uniform sampler2D uSampler2;
 
 varying vec2 vTextureCoord;
 
@@ -129,11 +128,11 @@ void main(void) {
 	// uSampler1: tierraSeca
 	// uSampler2: pasto
 			   
-	float c=cnoise(vTextureCoord.xyx*2.0);
+	float c=cnoise(vTextureCoord.xyx*4.0); //aca poner noiseScale en reemplazo de 2.0
 			  
-	//gl_FragColor = vec4(c,c,c,1.0);
+	//gl_FragColor = vec4(c,c,c,1.0); // para testear el ruido
 
-	vec4 textureColor0 = texture2D(uSampler0,vTextureCoord*3.0);
+	vec4 textureColor0 = texture2D(uSampler,vTextureCoord*3.0);
 	vec4 textureColor1 = texture2D(uSampler1,vTextureCoord*3.0);
 	vec4 textureColor2 = texture2D(uSampler2,vTextureCoord*3.0);
 
@@ -245,11 +244,6 @@ void main(void) {
     float specularFinal = specular + specular1 + specular2 + specular3 + specular4 + specular5 + specular6 + specular7 + specular8; 
 
     vec3 lightIntensity =  constantAmbient*uAmbientColor + constantDiffuse*difusseAngle*uDirectionalColor + constantSpecular*specularFinal*uDirectionalColor;
-    //gl_FragColor = vec4(vec3(0.0,1.0,0.0) * lightIntensity, 1.0);
-    //gl_FragColor = vec4(vVertexColor.rgb * lightIntensity, 1.0);
-
-    //gl_FragColor = vec4(vNormal , 1.0);
-
-	//gl_FragColor = 	textureColor0;
+        
 	gl_FragColor = (vec4(tierra,1.0)*c+textureColor2*(1.0-c)) * vec4(lightIntensity, 1.0);
 }

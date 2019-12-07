@@ -13,6 +13,7 @@ function Esfera() {
       vec3.fromValues(1.0, 0.0, 0.0),
       discretizacion
     );
+    //this.usarColores = true;
     var color = [0.740,0.995,0.908];
     this.setColorUniforme(color);
   }

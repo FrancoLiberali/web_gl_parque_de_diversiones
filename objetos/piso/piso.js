@@ -1,7 +1,7 @@
  
-function Piso(imagenesCargadas) {
+function Piso() {
   Objeto3D.call(this, true, true); //Objeto3D.call(this, conTapa);
-  this.imagenes = imagenesCargadas;
+  //this.imagenes = imagenesCargadas;
 /*
   this.crearPiso = function() {
     var figura = new Cuadrado(2000);
