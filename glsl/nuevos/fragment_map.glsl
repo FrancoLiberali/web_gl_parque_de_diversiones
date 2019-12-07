@@ -19,8 +19,8 @@ void main(void) {
     //if (alfa < 0.0) alfa = -alfa;
     //if (beta < 0.0) beta = -beta;
 
-    //vec2 textureCoord = vec2(beta/(2.0*M_PI), alfa/M_PI); //ok
-    vec2 textureCoord = vec2(alfa/M_PI, beta/(M_PI)); //test
+    vec2 textureCoord = vec2(beta/(2.0*M_PI), alfa/M_PI); //ok
+    //vec2 textureCoord = vec2(alfa/M_PI, beta/(M_PI)); //test
     vec4 textureColor = texture2D(uSampler4,textureCoord);
     
     gl_FragColor = textureColor;
