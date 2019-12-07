@@ -18,6 +18,7 @@ function Objeto3D(conTapa, conEjes = false) {
 
   this.texturas=[];
   
+  this.light = true;
 
   this.conTapa = conTapa;
   this.conEjes = conEjes;
@@ -127,7 +128,7 @@ function Objeto3D(conTapa, conEjes = false) {
 
     if (this.vertexBuffer && this.indexBuffer && this.normalBuffer) {
       // dibujar la geometria del objeto, segun la tranformacion de "matrizModeladoFinal"
-      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.textureBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColores, this.texturas);
+      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.textureBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColores, this.texturas, this.ligh);
 
     }
 

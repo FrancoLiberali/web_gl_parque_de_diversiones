@@ -2,6 +2,7 @@ precision highp float;
 
 uniform vec3 uAmbientColor;
 uniform vec3 uDirectionalColor;
+uniform bool light;
 
 varying highp vec4 vColor;
 varying vec3 vNormal;
@@ -118,6 +119,13 @@ void main(void) {
 
     vec3 lightIntensity =  constantAmbient*uAmbientColor + constantDiffuse*difusseAngle*uDirectionalColor + constantSpecular*specularFinal*uDirectionalColor;
     
-    gl_FragColor = vec4(vColor.rgb * lightIntensity, 1.0);
+   
+
+    if (light){
+         gl_FragColor = vec4(vColor.rgb * lightIntensity, 1.0);
+    }
+    else {
+        gl_FragColor = vColor;
+    }
 
 }

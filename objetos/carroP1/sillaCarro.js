@@ -17,7 +17,7 @@ function SillaCarro() {
       discretizacion,
       this.conTapa,
     );
-    
+    this.texturas = null;
     this.usarColores = true;
     var color = [0.526,0.905,0.268];
     this.setColorUniforme(color);

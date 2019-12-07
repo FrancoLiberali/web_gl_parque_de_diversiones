@@ -19,4 +19,5 @@ function Esfera() {
   }
   this.crearEsfera();
   this.setupWebGLBuffers();
+  //this.initTexture("./objetos/sunset.jpg");
 }

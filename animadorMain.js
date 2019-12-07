@@ -345,7 +345,7 @@ function setupVertexShaderMatrix(matrizModelado) {
 
 }
 
-function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndexBuffer, trianglesTextureBuffer, colorBuffer, matrizModelado, colors, texture) {
+function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndexBuffer, trianglesTextureBuffer, colorBuffer, matrizModelado, colors, texture, light = true) {
 
   if (texture && colors){
     glProgram = glMapProgram;
@@ -375,6 +375,8 @@ function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndex
     gl.enableVertexAttribArray(vertexNormalAttribute);
     gl.bindBuffer(gl.ARRAY_BUFFER, trianglesNormalBuffer);
     gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+
+    gl.uniform1i(gl.getUniformLocation(glProgram, "light"), true);
 
     setupLight();
   

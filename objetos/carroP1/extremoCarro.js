@@ -16,6 +16,8 @@ function ExtremoCarro() {
       discretizacion,
       this.conTapa,
     );
+    this.texturas = null;
+    this.light = false;
     this.usarColores = true;
     var color = [0.930,0.827,0.013];
     this.setColorUniforme(color);
