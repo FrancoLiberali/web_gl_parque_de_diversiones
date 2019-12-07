@@ -23,5 +23,5 @@ function Cilindro(conTapa = false, conEjes, alto = 1.0 , radio = 1.0) {
 
   this.crearCilindro();
   this.setupWebGLBuffers();
-  this.initTexture("./objetos/sunset.jpg");
+  this.initTexture("./objetos/refmapGreyRoom3.jpg");
 }

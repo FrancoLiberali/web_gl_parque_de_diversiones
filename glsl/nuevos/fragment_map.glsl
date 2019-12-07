@@ -16,11 +16,12 @@ void main(void) {
     float r = sqrt(pow(rayoReflejado.x, 2.0) + pow(rayoReflejado.y, 2.0) + pow(rayoReflejado.z, 2.0));
     float alfa = atan(rayoReflejado.y, rayoReflejado.x);
     float beta = acos(rayoReflejado.z/r);
-    if (alfa < 0.0) alfa = -alfa;
-    if (beta < 0.0) beta = -beta;
+    //if (alfa < 0.0) alfa = -alfa;
+    //if (beta < 0.0) beta = -beta;
 
     vec2 textureCoord = vec2(beta/(2.0*M_PI), alfa/M_PI);
     vec4 textureColor = texture2D(uSampler4,textureCoord);
     
     gl_FragColor = textureColor;
+    //gl_FragColor = vec4(rayoReflejado, 1.0);
 }

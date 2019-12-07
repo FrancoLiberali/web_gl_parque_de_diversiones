@@ -26,8 +26,8 @@ var rotate_angle = 0;
 //camaras
 var vista = mat4.create();
 mat4.identity(vista);
-var camara = vec3.fromValues(-1.5, 0.0, 0.50);
-var foco = vec3.fromValues(100.0, 0.0, 0.0);
+camara = vec3.fromValues(-1.5, 0.0, 0.50);
+foco = vec3.fromValues(100.0, 0.0, 0.0);
 
 var camara0 = vec3.fromValues(0.0, 0.0, 0.0);
 var foco0 = vec3.fromValues(100.0, 0.0, 0.0);
