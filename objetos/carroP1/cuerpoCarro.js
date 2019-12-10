@@ -17,7 +17,7 @@ function CuerpoCarro() {
       this.conTapa,
     );
 
-    this.usarColores = true;
+    //this.usarColores = true;
     var color = [0.930,0.827,0.013];
     this.setColorUniforme(color);
   }
@@ -71,8 +71,10 @@ function CuerpoCarro() {
 
     if (this.vertexBuffer && this.indexBuffer && this.normalBuffer) {
       // dibujar la geometria del objeto, segun la tranformacion de "matrizModeladoFinal"
-      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.textureBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColores, null, this.light);
+      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.textureBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColor, this.usarTextura, this.usarMapa, this.texturas, this.light);
+      //drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.textureBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColores, null, this.light);
     }
+    
     
 
     if (this.hijos.length > 0) {

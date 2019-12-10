@@ -1,4 +1,4 @@
-function Cilindro(conTapa = false, conEjes, alto = 1.0 , radio = 1.0) {
+function Cilindro(conTapa = false, conEjes, alto = 1.0 , radio = 1.0, usarColor = false, color = null) {
   Objeto3D.call(this, conTapa, conEjes);
 
   this.crearCilindro = function() {
@@ -16,12 +16,16 @@ function Cilindro(conTapa = false, conEjes, alto = 1.0 , radio = 1.0) {
       discretizacion,
       this.conTapa,
     );
-    this.usarColores = true;
-    //var color = [1.000,0.261,0.030];
-    //this.setColorUniforme(color);
+    if (usarColor){
+      //var color = [1.000,0.261,0.030];
+      this.setColorUniforme(color);
+    } 
   }
-
+  
   this.crearCilindro();
   this.setupWebGLBuffers();
-  this.initTexture("./objetos/refmapGreyRoom3.jpg");
+  if(usarColor === false){
+    this.initTexture("./objetos/refmapGreyRoom3.jpg");
+    this.usarMapa =true;
+  }
 }

@@ -13,7 +13,7 @@ function Montania() {
     // cte(o lo mas cercano a ello).  
     for(var i = 0; i <= this.recta.cantidadDeCurvas; i += (this.recta.cantidadDeCurvas/nPilares) ){
       var pto = this.recta.parametrizacion(i);
-      var pilar = new Cilindro(false, true, 8/7*pto[2], 0.125);
+      var pilar = new Cilindro(false, true, 41/40*pto[2], 0.125, true, [1.000,0.261,0.030]);
       // modifico con la misma cantidad el eje x y z para disminuir el radio del cilindro
       // y es y le escalo la altura de la montaña rusa
       //Nota eso ultimo funciona asi ya que el cilindro tiene y = 1; 
@@ -43,8 +43,9 @@ function Montania() {
       true,
     );
 
-    this.usarColores = true;
-    var color = [0.269,0.355,0.345];
+    //this.usarColores = true;
+    this.usarMapa = true;
+    //var color = [0.269,0.355,0.345];
     //this.setColorUniforme(color);
   }
 
@@ -55,6 +56,7 @@ function Montania() {
   };
   this.crearMontania();
   this.setupWebGLBuffers();
+  this.usarMapa = true;
   this.initTexture("./objetos/refmapGreyRoom3.jpg");
 }
 

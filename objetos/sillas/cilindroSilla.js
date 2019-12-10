@@ -62,11 +62,9 @@ function CilindroSilla(conTapa = false, conEjes = true, alto = 1.0 , radio = 1.0
     }
     
     this.crearCilindroSilla();
-    //this.usarColores = true;
-    var color = [1.000,0.261,0.030];
-    //this.setColorUniforme(color);
     this.rotar(-Math.PI/2, vec3.fromValues(1.0,0.0,0.0));
     this.setupWebGLBuffers();
+    this.usarTextura = true;
     this.initTexture(this.texturePath);
     
 }

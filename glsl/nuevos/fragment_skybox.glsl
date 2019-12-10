@@ -5,26 +5,49 @@ uniform vec3 uAmbientColor;
 uniform vec3 uDirectionalColor;
 uniform sampler2D uSampler0;
 
+uniform vec3 uLightPosition;
+uniform vec3 uLightPosition1;
+uniform vec3 uLightPosition2;
+uniform vec3 uLightPosition3;
+uniform vec3 uLightPosition4;
+uniform vec3 uLightPosition5;
+uniform vec3 uLightPosition6;
+uniform vec3 uLightPosition7;
+uniform vec3 uLightPosition8;
+
 varying vec2 vTextureCoord;
 varying vec3 vNormal;
+
 varying vec3 vViewDir;
-varying vec3 vLightDir;
-varying vec3 vLightDir1;
-varying vec3 vLightDir2;
-varying vec3 vLightDir3;
-varying vec3 vLightDir4;
-varying vec3 vLightDir5;
-varying vec3 vLightDir6;
-varying vec3 vLightDir7;
-varying vec3 vLightDir8;
+varying vec3 vPos;
 
 void main(void) {
+    
+    vec3 vLightDir =  uLightPosition - vPos;
+    vec3 vLightDir1 = uLightPosition1 - vPos;
+    vec3 vLightDir2 = uLightPosition2 - vPos;
+    vec3 vLightDir3 = uLightPosition3 - vPos;
+    vec3 vLightDir4 = uLightPosition4 - vPos;
+    vec3 vLightDir5 = uLightPosition5 - vPos;
+    vec3 vLightDir6 = uLightPosition6 - vPos;
+    vec3 vLightDir7 = uLightPosition7 - vPos;
+    vec3 vLightDir8 = uLightPosition8 - vPos;
 
     const float constantAmbient = 0.250;
     const float constantDiffuse = 0.50;
     const float constantSpecular = 1.0;
 
-    float specular = 0.2;
+    float distance0 = distance(uLightPosition, vPos);
+    float distance1 = distance(uLightPosition1, vPos);
+    float distance2 = distance(uLightPosition2, vPos);
+    float distance3 = distance(uLightPosition3, vPos);
+    float distance4 = distance(uLightPosition4, vPos);
+    float distance5 = distance(uLightPosition5, vPos);
+    float distance6 = distance(uLightPosition6, vPos);
+    float distance7 = distance(uLightPosition7, vPos);
+    float distance8 = distance(uLightPosition8, vPos);
+
+    float specular =  0.2;
     float specular1 = 0.2;
     float specular2 = 0.2;
     float specular3 = 0.2;
@@ -34,11 +57,11 @@ void main(void) {
     float specular7 = 0.2;
     float specular8 = 0.2;
 
-
     float glossiness = 80.0;
 	
     vec3 normal = vNormal;
-	vec3 lightDir = normalize(vLightDir);
+	
+    vec3 lightDir = normalize(vLightDir);
     vec3 lightDir1 = normalize(vLightDir1);
     vec3 lightDir2 = normalize(vLightDir2);
     vec3 lightDir3 = normalize(vLightDir3);
@@ -49,15 +72,18 @@ void main(void) {
     vec3 lightDir8 = normalize(vLightDir8);
 
     vec3 viewDir = vViewDir;
-    float diffuseCos = max(dot(lightDir, normal), 0.0);
-    float diffuseCos1 = max(dot(lightDir1, normal), 0.0);
-    float diffuseCos2 = max(dot(lightDir2, normal), 0.0);
-    float diffuseCos3 = max(dot(lightDir3, normal), 0.0);
-    float diffuseCos4 = max(dot(lightDir4, normal), 0.0);
-    float diffuseCos5 = max(dot(lightDir5, normal), 0.0);
-    float diffuseCos6 = max(dot(lightDir6, normal), 0.0);
-    float diffuseCos7 = max(dot(lightDir7, normal), 0.0);
-    float diffuseCos8 = max(dot(lightDir8, normal), 0.0);
+
+    float p0 = 1.0;
+
+    float diffuseCos =  max(dot(lightDir, normal), 0.0)/pow(distance0, p0);
+    float diffuseCos1 = max(dot(lightDir1, normal), 0.0)/pow(distance1, p0);
+    float diffuseCos2 = max(dot(lightDir2, normal), 0.0)/pow(distance2, p0);
+    float diffuseCos3 = max(dot(lightDir3, normal), 0.0)/pow(distance3, p0);
+    float diffuseCos4 = max(dot(lightDir4, normal), 0.0)/pow(distance4, p0);
+    float diffuseCos5 = max(dot(lightDir5, normal), 0.0)/pow(distance5, p0);
+    float diffuseCos6 = max(dot(lightDir6, normal), 0.0)/pow(distance6, p0);
+    float diffuseCos7 = max(dot(lightDir7, normal), 0.0)/pow(distance7, p0);
+    float diffuseCos8 = max(dot(lightDir8, normal), 0.0)/pow(distance8, p0);
     
     //faro0
     if(diffuseCos > 0.0) {
@@ -113,6 +139,15 @@ void main(void) {
         float specularCos = max(dot(reflectDir, viewDir), 0.0);
         specular8 = pow(specularCos, glossiness);
     }
+    specular = specular/pow(distance0, p0);
+    specular1 = specular1/pow(distance1, p0);
+    specular2 = specular2/pow(distance2, p0);
+    specular3 = specular3/pow(distance3, p0);
+    specular4 = specular4/pow(distance4, p0);
+    specular5 = specular5/pow(distance5, p0);
+    specular6 = specular6/pow(distance6, p0);
+    specular7 = specular7/pow(distance7, p0);
+    specular8 = specular8/pow(distance8, p0);
 
     float difusseAngle =  diffuseCos + diffuseCos1 + diffuseCos2 + diffuseCos3 + diffuseCos4 + diffuseCos5 + diffuseCos6 + diffuseCos7 + diffuseCos8;
 

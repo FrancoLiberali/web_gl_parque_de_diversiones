@@ -13,7 +13,7 @@ function Farol() {
     pantalla.transladar(0.0, h+0.19, 0.0);
     this.agregarHijo(pantalla);
     this.rotar(Math.PI/2, vec3.fromValues(1.0,0.0,0.0));
-
+    palo.light = false;
   }
 
   this.crearFarol();

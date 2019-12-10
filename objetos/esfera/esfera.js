@@ -16,6 +16,7 @@ function Esfera() {
     //this.usarColores = true;
     var color = [0.740,0.995,0.908];
     this.setColorUniforme(color);
+    this.light = false;
   }
   this.crearEsfera();
   this.setupWebGLBuffers();

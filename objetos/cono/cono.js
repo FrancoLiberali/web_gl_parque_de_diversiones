@@ -26,6 +26,7 @@ function Cono(conTapa, conEjes, porcentaje = MAX_PORCENTAJE, alto = 1.0 , radio 
       this.conTapa,
       escalas
     );
+    this.setColorUniforme([0.248,0.490,1.000]);
   }
   this.crearCono();
   this.setupWebGLBuffers();

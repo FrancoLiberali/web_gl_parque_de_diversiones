@@ -129,7 +129,7 @@ function CirculoB() {
   
   var pista0 = [p00, p01, p02, p03, p00, p01, p02];
   var pista1 = [p8,pt,pt, p1, p2, p3, p4, p5, p6, p7, p8,p8,pt,pt];
-  this.pistas = [pista0, pista1, pista2];
+  this.pistas = [pista0, pista2, pista1];
   this.pts = this.pistas[app.pista];
 
   BSpline.call(this, this.pts);

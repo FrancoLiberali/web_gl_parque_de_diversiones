@@ -8,12 +8,12 @@ function TexturedSphere(latitude_bands, longitude_bands){
         // Y también la informacón de las normales y coordenadas de textura para cada vertice de la esfera
         // La esfera se renderizara utilizando triangulos, para ello se arma un buffer de índices 
         // a todos los triangulos de la esfera
-		
+	
     this.crearSkyboxSphere = function(){
 
         var latNumber;
         var longNumber;
-        var radio = 40.0;
+        var radio = 50.0;
         for (latNumber=0; latNumber <= this.latitudeBands/2; latNumber++) {
             var theta = latNumber * Math.PI / (this.latitudeBands);
             var sinTheta = Math.sin(theta);
@@ -62,6 +62,8 @@ function TexturedSphere(latitude_bands, longitude_bands){
         
     }
     this.crearSkyboxSphere();
+    this.light = false;
+    this.usarTextura = true;
     this.rotar(Math.PI/2, vec3.fromValues(1.0,0.0,0.0));
     this.setupWebGLBuffers();
     this.initTexture("./objetos/sunset.jpg");

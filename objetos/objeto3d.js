@@ -7,7 +7,6 @@ function Objeto3D(conTapa, conEjes = false) {
   
 
   this.textureBuffer = null;
-  //this.texture = null;
   this.hasTexture = false;
 
   this.vertex_array = [];
@@ -16,7 +15,10 @@ function Objeto3D(conTapa, conEjes = false) {
   this.color_array = [];
   this.texture_array = [];
 
-  this.texturas=[];
+  this.texturas = [];
+  this.usarTextura = false;
+  this.usarColor = false;
+  this.usarMapa = false;
   
   this.light = true;
 
@@ -85,6 +87,7 @@ function Objeto3D(conTapa, conEjes = false) {
   }
 
   this.setColorUniforme = function(color) {
+    this.usarColor = true;
     for (i = 0; i < (this.vertex_array.length)/3; i += 1) {
       this.color_array.push(color[0]);
       this.color_array.push(color[1]);
@@ -128,7 +131,7 @@ function Objeto3D(conTapa, conEjes = false) {
 
     if (this.vertexBuffer && this.indexBuffer && this.normalBuffer) {
       // dibujar la geometria del objeto, segun la tranformacion de "matrizModeladoFinal"
-      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.textureBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColores, this.texturas, this.ligh);
+      drawScene(this.vertexBuffer, this.normalBuffer, this.indexBuffer, this.textureBuffer, this.colorBuffer, matrizModeladoFinal, this.usarColor, this.usarTextura, this.usarMapa, this.texturas, this.light);
 
     }
 
@@ -191,7 +194,7 @@ LADO_EJE = 0.05
 function Eje(eje) {
   Cubo.call(this, LADO_EJE, true, false);
 
-  this.usarColores = true;
+  this.usarColor = true;
   this.crearEje = function() {
     this.escalar(40.0, 1.0, 1.0);
     var color = [];

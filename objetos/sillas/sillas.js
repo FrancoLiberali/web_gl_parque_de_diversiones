@@ -4,7 +4,7 @@ function Sillas(h, cant_sillas) {
   Objeto3D.call(this, false, true);
 
   this.crearSillas = function() {
-    var primerCilindro = new Cilindro(false, false, 0.5, 0.25);
+    var primerCilindro = new Cilindro(false, false, 0.5, 0.25, true, [0.248,0.490,1.000]);
     //primerCilindro.escalar(0.25, 0.5, 0.25);
     this.agregarHijo(primerCilindro);
 
@@ -13,7 +13,7 @@ function Sillas(h, cant_sillas) {
     primerCono.transladar(0.0, 0.5, 0.0);
     this.agregarHijo(primerCono);
 
-    var segundoCilindro = new Cilindro(false, false, 0.1, 0.25 * 0.85);
+    var segundoCilindro = new Cilindro(false, false, 0.1, 0.25 * 0.85, true, [0.248,0.490,1.000]);
     //segundoCilindro.escalar(0.25 * 0.85, 0.1, 0.25 * 0.85);
     segundoCilindro.transladar(0.0, 0.5 + 0.15, 0.0);
     this.agregarHijo(segundoCilindro);
@@ -81,7 +81,6 @@ function Sillas(h, cant_sillas) {
     }
   }
   this.crearSillas();
-
   this.girar = false;
   this.velocidadAngular = 0;
   this.cantidadFramesIniciarAnimacion = 0;

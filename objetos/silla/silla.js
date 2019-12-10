@@ -16,6 +16,9 @@ function Silla(conEjes = false) {
       discretizacion,
       true,
     );
+    this.setColorUniforme([0.700,0.150,1.000]);
+    
+
   }
   this.crearSilla();
   this.setupWebGLBuffers();

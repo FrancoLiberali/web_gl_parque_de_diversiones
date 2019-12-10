@@ -1,6 +1,6 @@
 precision highp float;
 
-attribute vec3 aVertexPosition;
+attribute vec3 aVertexPosition; 
 attribute vec3 aVertexNormal;
 
 uniform mat4 modelMatrix;               // matriz de modelado
@@ -15,6 +15,8 @@ varying vec3 vCamDir;
 varying vec3 vNormal;
 varying vec3 vPosition;
 
+varying vec3 vPos;
+varying vec3 vViewDir;
 
 void main(void) {
     // Transformamos al vertice al espacio de la camara
@@ -28,5 +30,9 @@ void main(void) {
     vNormal = normalize((normalMatrix * vec4(aVertexNormal, 1.0)).xyz);
     vCamDir = uCamaraPosition;
 
-    vPosition = (position/position.w).xyz;
+    vPosition = pos_view.xyz;
+
+    vPos = pos_view.xyz;    
+
+    vViewDir = normalize(-pos_view.xyz);
 }

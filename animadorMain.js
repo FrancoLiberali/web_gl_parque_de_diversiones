@@ -29,16 +29,16 @@ mat4.identity(vista);
 camara = vec3.fromValues(-1.5, 0.0, 0.50);
 foco = vec3.fromValues(100.0, 0.0, 0.0);
 
-var camara0 = vec3.fromValues(0.0, 0.0, 0.0);
+var camara0 = vec3.fromValues(0.0, 0.0, 0.05);
 var foco0 = vec3.fromValues(100.0, 0.0, 0.0);
 
-var camara1 = vec3.fromValues(0.0, 0.0, 0.0);
+var camara1 = vec3.fromValues(0.0, 0.0, 0.05);
 var foco1 = vec3.fromValues(10.0, 20.0, 0.0);
 
-var camara2 = vec3.fromValues(0.0, 0.0, 0.0);
+var camara2 = vec3.fromValues(0.0, 0.0, 0.05);
 var foco2 = vec3.fromValues(-5.0, -15.0, 0.0);
 
-var camara3 = vec3.fromValues(100.0, 0.0, 0.0);
+var camara3 = vec3.fromValues(39.0, 0.0, 0.05);
 var foco3 = vec3.fromValues(0.0, 0.0, 0.0);
 
 // matriz de giro sobre el eje x (foco) 
@@ -345,9 +345,9 @@ function setupVertexShaderMatrix(matrizModelado) {
 
 }
 
-function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndexBuffer, trianglesTextureBuffer, colorBuffer, matrizModelado, colors, texture, light = true) {
+function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndexBuffer, trianglesTextureBuffer, colorBuffer, matrizModelado, usarColor, usarTextura, usarMapa, texturas, light) {
 
-  if (texture && colors){
+  if (usarMapa){
     glProgram = glMapProgram;
     gl.useProgram(glProgram);
 
@@ -359,10 +359,14 @@ function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndex
     var cameraLocation = gl.getUniformLocation(glProgram, "uCamaraPosition");
     gl.uniform3fv(cameraLocation, camara);
 
-    setupTexture(texture, "uSampler4", 0);    
+    setupTexture(texturas, "uSampler4", 0);
+
+    gl.uniform1i(gl.getUniformLocation(glProgram, "light"), light);
+
+    setupLight();
 
   }
-  else if (colors) {
+  else if (usarColor) {
     glProgram = glColorProgram;
     gl.useProgram(glProgram);
 
@@ -376,12 +380,12 @@ function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndex
     gl.bindBuffer(gl.ARRAY_BUFFER, trianglesNormalBuffer);
     gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
 
-    gl.uniform1i(gl.getUniformLocation(glProgram, "light"), true);
+    gl.uniform1i(gl.getUniformLocation(glProgram, "light"), light);
 
     setupLight();
   
 
-  } else if (texture.length === 3){
+  } else if (texturas.length === 3){
     glProgram = glPisoProgram;
     gl.useProgram(glProgram);
 
@@ -396,13 +400,13 @@ function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndex
     gl.bindBuffer(gl.ARRAY_BUFFER, trianglesTextureBuffer);
     gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
 
-    setupTexture(texture, "uSampler", 0);
-    setupTexture(texture, "uSampler1", 1);
-    setupTexture(texture, "uSampler2", 2);
+    setupTexture(texturas, "uSampler", 0);
+    setupTexture(texturas, "uSampler1", 1);
+    setupTexture(texturas, "uSampler2", 2);
 
     setupLight();
 
-  }else if (texture[0]){
+  }else if (usarTextura){
     glProgram = glSkyboxProgram;
     gl.useProgram(glProgram);
 
@@ -416,9 +420,9 @@ function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndex
     gl.bindBuffer(gl.ARRAY_BUFFER, trianglesTextureBuffer);
     gl.vertexAttribPointer(vertexTextureAttribute, 2, gl.FLOAT, false, 0, 0);
     
-    setupTexture(texture, "uSampler0", 0);
+    setupTexture(texturas, "uSampler0", 0);
     setupLight();
-    gl.uniform1i(gl.getUniformLocation(glProgram, "light"), true);
+    gl.uniform1i(gl.getUniformLocation(glProgram, "light"), light);
 
   }  else {
     glProgram = glNormalProgram;
@@ -503,7 +507,7 @@ function cambiarCamara(codigo){
   }
   // camara orbital centrada en montaña rusa
   if (codigo == 1){
-    radio = 30;
+    radio = 20;
     primeraPersona = false;
     camara0 = camara;
     foco0 = foco;
@@ -523,7 +527,7 @@ function cambiarCamara(codigo){
   }
   // camara orbital centrada en el origen
   if (codigo == 3){
-    radio = 60;
+    radio = 39;
     camara2 = camara;
     foco2 = foco;
 
@@ -647,7 +651,7 @@ function girarCamara(){
 
   //evita que el la camara este por debajo del piso
   if(tmp[2] < 0)
-    tmp[2] = 0;
+    tmp[2] = 0.05;
 
   camara = tmp;
 };
