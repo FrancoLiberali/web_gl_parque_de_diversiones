@@ -43,10 +43,8 @@ function Montania() {
       true,
     );
 
-    //this.usarColores = true;
     this.usarMapa = true;
-    //var color = [0.269,0.355,0.345];
-    //this.setColorUniforme(color);
+
   }
 
   this.getPosicion = function(){

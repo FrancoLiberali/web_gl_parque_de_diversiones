@@ -296,6 +296,16 @@ function setupLight() {
   var lightWorldPositionLocation7 = gl.getUniformLocation(glProgram, "uLightPosition7");
   var lightWorldPositionLocation8 = gl.getUniformLocation(glProgram, "uLightPosition8");
 
+  var constantAmbient = gl.getUniformLocation(glProgram, "constantAmbient");
+  var constantDiffuse = gl.getUniformLocation(glProgram, "constantDiffuse");
+  var constantSpecular = gl.getUniformLocation(glProgram, "constantSpecular");
+  var glossiness = gl.getUniformLocation(glProgram, "glossiness");
+
+  gl.uniform1f(constantAmbient, app.Ambiente);
+  gl.uniform1f(constantDiffuse, app.Difusa);
+  gl.uniform1f(constantSpecular, app.Especular);
+  gl.uniform1f(glossiness, app.Glossiness);
+
   gl.uniform3fv(lightWorldPositionLocation, [0.0, 0.0, 3.0]);
   gl.uniform3fv(lightWorldPositionLocation1, posicionFarol1);
   gl.uniform3fv(lightWorldPositionLocation2, posicionFarol2);
@@ -309,11 +319,11 @@ function setupLight() {
   var lightColorLocation = gl.getUniformLocation(glProgram, "uAmbientColor");
   var specularColorLocation = gl.getUniformLocation(glProgram, "uDirectionalColor");
 
-  var sunColor = vec3.fromValues(0.947,1.000,0.222);
-  var lightColor = vec3.fromValues(0.853,1.000,0.804);
+  var sunColor = vec3.fromValues(0.593,0.833,1.000);
+  var lightColor = vec3.fromValues(1.000,0.777,0.052);
   //sunColor = vec3.normalize(sunColor, sunColor);
-  sunColor = vec3.normalize(sunColor, sunColor);
-  lightColor = vec3.normalize(lightColor, lightColor);
+  //sunColor = vec3.normalize(sunColor, sunColor);
+  //lightColor = vec3.normalize(lightColor, lightColor);
   // set the light color
   gl.uniform3fv(lightColorLocation, sunColor);  // red light
   // set the specular color
@@ -379,6 +389,9 @@ function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndex
     gl.enableVertexAttribArray(vertexNormalAttribute);
     gl.bindBuffer(gl.ARRAY_BUFFER, trianglesNormalBuffer);
     gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+
+    var cameraLocation = gl.getUniformLocation(glProgram, "uCamaraPosition");
+    gl.uniform3fv(cameraLocation, camara);
 
     gl.uniform1i(gl.getUniformLocation(glProgram, "light"), light);
 

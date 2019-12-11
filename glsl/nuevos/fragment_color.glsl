@@ -3,6 +3,7 @@ precision highp float;
 uniform vec3 uAmbientColor;
 uniform vec3 uDirectionalColor;
 uniform bool light;
+uniform vec3 uCamaraPosition
 
 uniform vec3 uLightPosition;
 uniform vec3 uLightPosition1;
@@ -13,6 +14,11 @@ uniform vec3 uLightPosition5;
 uniform vec3 uLightPosition6;
 uniform vec3 uLightPosition7;
 uniform vec3 uLightPosition8;
+
+uniform float constantAmbient;
+uniform float constantDiffuse;
+uniform float constantSpecular;
+uniform float glossiness;
 
 varying highp vec4 vColor;
 varying vec3 vNormal;
@@ -41,9 +47,9 @@ void main(void) {
     float distance7 = distance(uLightPosition7, vPos);
     float distance8 = distance(uLightPosition8, vPos);
 
-    const float constantAmbient = 0.550;
-    const float constantDiffuse = 0.50;
-    const float constantSpecular = 1.0;
+    //const float constantAmbient = 0.550;
+    //const float constantDiffuse = 0.50;
+    //const float constantSpecular = 1.0;
 
     float specular = 0.2;
     float specular1 = 0.2;
@@ -56,7 +62,7 @@ void main(void) {
     float specular8 = 0.2;
 
 
-    float glossiness = 80.0;
+    //float glossiness = 80.0;
 	
     vec3 normal = vNormal;
 	vec3 lightDir = normalize(vLightDir);

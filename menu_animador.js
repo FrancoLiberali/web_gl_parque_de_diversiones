@@ -12,6 +12,12 @@ var app = {
   },
   cantidadDePilares: 17,
   pista: 0,
+  Glossiness: 80.0 ,
+  Especular: 0.95,
+  Ambiente: 0.550,
+  Difusa: 0.5 ,
+
+
 };
 
 function GUI() {
@@ -42,6 +48,15 @@ function GUI() {
   f3.add(app, 'pista', 0, 1).name("Pista").step(1);
 
   f3.open();
+
+  var f4 = gui.addFolder('Parametros iluminacion');
+
+  f4.add(app, 'Glossiness', 0.0, 1.0).name("Glossiness").step(0.05);
+  f4.add(app, 'Especular', 0.0, 1.0).name("Especular").step(0.05);
+  f4.add(app, 'Ambiente', 0.0, 1.0).name("Ambiente").step(0.05);
+  f4.add(app, 'Difusa', 0.0, 1.0).name("Difusa").step(0.05);
+
+  f4.open();
 };
 
 GUI();

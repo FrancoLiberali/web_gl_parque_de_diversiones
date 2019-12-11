@@ -15,6 +15,11 @@ uniform vec3 uLightPosition6;
 uniform vec3 uLightPosition7;
 uniform vec3 uLightPosition8;
 
+uniform float constantAmbient;
+uniform float constantDiffuse;
+uniform float constantSpecular;
+uniform float glossiness;
+
 varying vec2 vTextureCoord;
 varying vec3 vNormal;
 
@@ -33,9 +38,9 @@ void main(void) {
     vec3 vLightDir7 = uLightPosition7 - vPos;
     vec3 vLightDir8 = uLightPosition8 - vPos;
 
-    const float constantAmbient = 0.250;
-    const float constantDiffuse = 0.50;
-    const float constantSpecular = 1.0;
+    //const float constantAmbient = 0.250;
+    //const float constantDiffuse = 0.50;
+    //const float constantSpecular = 1.0;
 
     float distance0 = distance(uLightPosition, vPos);
     float distance1 = distance(uLightPosition1, vPos);
@@ -57,7 +62,7 @@ void main(void) {
     float specular7 = 0.2;
     float specular8 = 0.2;
 
-    float glossiness = 80.0;
+    //float glossiness = 80.0;
 	
     vec3 normal = vNormal;
 	

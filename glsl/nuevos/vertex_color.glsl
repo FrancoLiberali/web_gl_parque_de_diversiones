@@ -27,7 +27,7 @@ void main(void) {
     gl_Position = projMatrix * pos_camera_view;
     
     // Coordenada de textura sin modifiaciones
-    vec3 pos = vec3(pos_view) / pos_view.w;
+    vec3 pos = pos_view.xyz / pos_view.w;
     vNormal = normalize((normalMatrix * vec4(aVertexNormal, 1.0)).xyz); //la normal en coordenadas de mundo
     
     vPos = pos;    
