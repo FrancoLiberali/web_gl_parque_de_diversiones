@@ -199,7 +199,7 @@ void main(void) {
     vec4 textureColor = texture2D(uSampler4,textureCoord);
     
     if (light){
-         gl_FragColor = textureColor * vec4(lightIntensity, 1.0);
+         gl_FragColor = textureColor* 0.5 * vec4(lightIntensity, 1.0);
     }
     else {
         gl_FragColor = textureColor;

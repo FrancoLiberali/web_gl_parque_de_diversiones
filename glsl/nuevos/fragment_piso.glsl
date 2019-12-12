@@ -137,7 +137,7 @@ void main(void) {
 	// uSampler1: tierraSeca
 	// uSampler2: pasto
 			   
-	float c = cnoise(vTextureCoord.xyx*4.0); //aca poner noiseScale en reemplazo de 2.0
+	float c = cnoise(vTextureCoord.xyx*10.0); //aca poner noiseScale en reemplazo de 2.0
 			  
 	//gl_FragColor = vec4(c,c,c,1.0); // para testear el ruido
 
@@ -147,7 +147,7 @@ void main(void) {
 
 	vec3 tierra = vec3(0.0);
 
-	float pct = 0.25;
+	float pct = 0.5;
 
 	// Mix uses pct (a value from 0-1) to
 	// mix the two colors

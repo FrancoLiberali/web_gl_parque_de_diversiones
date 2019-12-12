@@ -60,7 +60,7 @@ function Piso() {
 
         0.0, 1.0, 0.0      // vertice 3, triangulo 2
     ];
-    var repeat = 10.0;
+    var repeat = 20.0;
     this.texture_array = [   
         0.0, 0.0,
         0.0, repeat,
