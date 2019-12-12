@@ -9,6 +9,9 @@ uniform mat4 viewMatrix;                // matriz de vista
 uniform mat4 projMatrix;                // matriz de proyección
 uniform mat4 normalMatrix;          // matriz de normales
 
+uniform vec3 uCamaraPosition;
+
+varying vec3 vSurfaceToView;
 varying vec3 vNormal;
 varying vec3 vViewDir;
 varying vec3 vPos;
@@ -28,4 +31,6 @@ void main(void) {
     vPos = pos;    
     vViewDir = normalize(-pos);
     vTextureCoord = aTextureCoord;
+    vSurfaceToView = uCamaraPosition - pos;
 }
+ 

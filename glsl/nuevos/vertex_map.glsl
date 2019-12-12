@@ -14,6 +14,7 @@ uniform vec3 uCamaraPosition;
 varying vec3 vCamDir;
 varying vec3 vNormal;
 varying vec3 vPosition;
+varying vec3 vSurfaceToView;
 
 varying vec3 vPos;
 varying vec3 vViewDir;
@@ -27,12 +28,16 @@ void main(void) {
     gl_Position = position;
     
     // Coordenada de textura sin modifiaciones
-    vNormal = normalize((normalMatrix * vec4(aVertexNormal, 1.0)).xyz);
     vCamDir = uCamaraPosition;
 
-    vPosition = pos_view.xyz;
+    vec3 pos = pos_view.xyz / pos_view.w;
+    vNormal = normalize((normalMatrix * vec4(aVertexNormal, 1.0)).xyz); //la normal en coordenadas de mundo
+    
+    vPos = pos;    
 
-    vPos = pos_view.xyz;    
+    // compute the vector of the surface to the view/camera
+    // and pass it to the fragment shader
+    vSurfaceToView = uCamaraPosition - pos;
 
     vViewDir = normalize(-pos_view.xyz);
 }

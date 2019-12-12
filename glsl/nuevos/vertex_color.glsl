@@ -9,7 +9,9 @@ uniform mat4 viewMatrix;				// matriz de vista
 uniform mat4 projMatrix;				// matriz de proyección
 
 uniform mat4 normalMatrix;			// matriz de normales
+uniform vec3 uCamaraPosition;
 
+varying vec3 vSurfaceToView;
 varying vec3 vViewDir;
 varying vec3 vNormal;						// vector normal enviado al fragment shader
 varying highp vec4 vColor;					// vector posición en coord de mundo.
@@ -31,6 +33,10 @@ void main(void) {
     vNormal = normalize((normalMatrix * vec4(aVertexNormal, 1.0)).xyz); //la normal en coordenadas de mundo
     
     vPos = pos;    
+
+    // compute the vector of the surface to the view/camera
+    // and pass it to the fragment shader
+    vSurfaceToView = uCamaraPosition - pos;
 
     vViewDir = normalize(-pos);
 	

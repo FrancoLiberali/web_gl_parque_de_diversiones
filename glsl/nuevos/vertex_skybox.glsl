@@ -6,9 +6,12 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;  
 uniform mat4 projMatrix;
 uniform mat4 normalMatrix;
+uniform vec3 uCamaraPosition;
 
 varying vec3 vViewDir;
-varying vec3 vNormal;						// vector normal enviado al fragment shader
+varying vec3 vNormal;				// vector normal enviado al fragment shader
+
+varying vec3 vSurfaceToView;
 
 varying vec3 vPos;
 
@@ -31,5 +34,6 @@ void main(void) {
     vViewDir = normalize(-pos);
 	vPos = pos;
     vTextureCoord = aTextureCoord;
-		
+	vSurfaceToView = uCamaraPosition - pos;
+
     }

@@ -296,7 +296,7 @@ function setupLight() {
   var lightWorldPositionLocation7 = gl.getUniformLocation(glProgram, "uLightPosition7");
   var lightWorldPositionLocation8 = gl.getUniformLocation(glProgram, "uLightPosition8");
 
-  var constantAmbient = gl.getUniformLocation(glProgram, "constantAmbient");
+/*  var constantAmbient = gl.getUniformLocation(glProgram, "constantAmbient");
   var constantDiffuse = gl.getUniformLocation(glProgram, "constantDiffuse");
   var constantSpecular = gl.getUniformLocation(glProgram, "constantSpecular");
   var glossiness = gl.getUniformLocation(glProgram, "glossiness");
@@ -304,9 +304,9 @@ function setupLight() {
   gl.uniform1f(constantAmbient, app.Ambiente);
   gl.uniform1f(constantDiffuse, app.Difusa);
   gl.uniform1f(constantSpecular, app.Especular);
-  gl.uniform1f(glossiness, app.Glossiness);
+  gl.uniform1f(glossiness, app.Glossiness); */
 
-  gl.uniform3fv(lightWorldPositionLocation, [0.0, 0.0, 3.0]);
+  gl.uniform3fv(lightWorldPositionLocation, [0.0, 0.0, 2.19]);
   gl.uniform3fv(lightWorldPositionLocation1, posicionFarol1);
   gl.uniform3fv(lightWorldPositionLocation2, posicionFarol2);
   gl.uniform3fv(lightWorldPositionLocation3, posicionFarol3);
@@ -320,7 +320,7 @@ function setupLight() {
   var specularColorLocation = gl.getUniformLocation(glProgram, "uDirectionalColor");
 
   var sunColor = vec3.fromValues(0.593,0.833,1.000);
-  var lightColor = vec3.fromValues(1.000,0.777,0.052);
+  var lightColor = vec3.fromValues(1.000,0.990,0.359);
   //sunColor = vec3.normalize(sunColor, sunColor);
   //sunColor = vec3.normalize(sunColor, sunColor);
   //lightColor = vec3.normalize(lightColor, lightColor);
@@ -417,6 +417,9 @@ function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndex
     setupTexture(texturas, "uSampler1", 1);
     setupTexture(texturas, "uSampler2", 2);
 
+    var cameraLocation = gl.getUniformLocation(glProgram, "uCamaraPosition");
+    gl.uniform3fv(cameraLocation, camara);
+
     setupLight();
 
   }else if (usarTextura){
@@ -436,6 +439,9 @@ function drawScene(trianglesVerticeBuffer, trianglesNormalBuffer, trianglesIndex
     setupTexture(texturas, "uSampler0", 0);
     setupLight();
     gl.uniform1i(gl.getUniformLocation(glProgram, "light"), light);
+
+    var cameraLocation = gl.getUniformLocation(glProgram, "uCamaraPosition");
+    gl.uniform3fv(cameraLocation, camara);
 
   }  else {
     glProgram = glNormalProgram;

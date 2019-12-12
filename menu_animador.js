@@ -51,7 +51,7 @@ function GUI() {
 
   var f4 = gui.addFolder('Parametros iluminacion');
 
-  f4.add(app, 'Glossiness', 0.0, 1.0).name("Glossiness").step(0.05);
+  f4.add(app, 'Glossiness', 0.0, 200.0).name("Glossiness").step(5);
   f4.add(app, 'Especular', 0.0, 1.0).name("Especular").step(0.05);
   f4.add(app, 'Ambiente', 0.0, 1.0).name("Ambiente").step(0.05);
   f4.add(app, 'Difusa', 0.0, 1.0).name("Difusa").step(0.05);
