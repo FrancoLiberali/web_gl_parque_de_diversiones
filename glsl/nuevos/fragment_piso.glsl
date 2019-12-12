@@ -137,7 +137,7 @@ void main(void) {
 	// uSampler1: tierraSeca
 	// uSampler2: pasto
 			   
-	float c = cnoise(vTextureCoord.xyx*10.0); //aca poner noiseScale en reemplazo de 2.0
+	float c = cnoise(vTextureCoord.xyx*8.0); //aca poner noiseScale en reemplazo de 2.0
 			  
 	//gl_FragColor = vec4(c,c,c,1.0); // para testear el ruido
 
@@ -151,7 +151,7 @@ void main(void) {
 
 	// Mix uses pct (a value from 0-1) to
 	// mix the two colors
-	tierra = mix(textureColor0.xyz, textureColor1.xyz, pct);
+	tierra = mix(textureColor0.xyz, textureColor1.xyz, c);
 	
 
 
@@ -294,5 +294,14 @@ void main(void) {
 
     vec3 lightIntensity =  constantAmbient*uAmbientColor + constantDiffuse*difusseAngle*uDirectionalColor + constantSpecular*specularFinal*uDirectionalColor;
         
-	gl_FragColor = (vec4(tierra,1.0)*c+textureColor2*(1.0-c)) * vec4(lightIntensity, 1.0);
+	
+    gl_FragColor = (vec4(tierra,1.0)*(1.0-c)+textureColor2*(c)) * vec4(lightIntensity, 1.0);
+
+    //Otras mezclas
+
+    //gl_FragColor = (vec4(tierra,1.0)*c+textureColor2*(1.0-c)) * vec4(lightIntensity, 1.0);
+    //gl_FragColor = textureColor2;
+    
+    //gl_FragColor = textureColor2*vec4(constantAmbient*uAmbientColor, 1.0) + vec4(tierra * constantDiffuse*difusseAngle*uDirectionalColor, 1.0);
+    //gl_FragColor = vec4(tierra,1.0)* vec4(lightIntensity, 1.0);
 }
